@@ -1,12 +1,17 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-ifneq ($(wildcard $(objtree)/toolchain.info),)
-  toolchain_diff != $(find-toolchain) | \
+ifneq ($(filter-out clean distclean,$(or $(MAKECMDGOALS),miku)),)
+  ifneq ($(wildcard $(objtree)/toolchain.info),)
+    toolchain_diff != $(find-toolchain) | \
 		    diff - $(objtree)/toolchain.info | tr '\n' '@'
-  ifneq ($(toolchain_diff),)
-    $(error Toolchain mismatch $(LF) $(subst @,$(LF),$(toolchain_diff)))
+    ifneq ($(toolchain_diff),)
+      $(error Toolchain mismatch $(LF) $(subst @,$(LF),$(toolchain_diff)))
+    endif
   endif
 endif
+
+clean += $(objtree)/repo.info $(objtree)/toolchain.info \
+	 $(objtree)/cc.info $(objtree)/ld.info
 
 $(objtree)/repo.info:
 	mkdir -p $(@D)

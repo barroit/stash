@@ -15,6 +15,8 @@ find-toolchain := scripts/find-toolchain.py
 
 objtree := build
 
+clean :=
+
 include scripts/Makefile.helper
 include scripts/Makefile.toolchain
 
@@ -22,3 +24,8 @@ include scripts/Makefile.toolchain
 
 menuconfig: $(objtree)/cc.info $(objtree)/ld.info $(objtree)/repo.info
 	OBJTREE=$(objtree) MENUCONFIG_STYLE=aquatic $(menuconfig)
+
+.PHONY: clean
+
+clean:
+	rm -f $(clean)
