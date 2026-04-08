@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+ifneq ($(wildcard $(objtree)/toolchain.info),)
+  toolchain_diff != $(find-toolchain) | \
+		    diff - $(objtree)/toolchain.info | tr '\n' '@'
+  ifneq ($(toolchain_diff),)
+    $(error Toolchain mismatch $(LF) $(subst @,$(LF),$(toolchain_diff)))
+  endif
+endif
+
+$(objtree)/repo.info:
+	mkdir -p $(@D)
+	printf '%s\t%s\n' $(name) $(version) >$@
+
+$(objtree)/toolchain.info:
+	mkdir -p $(@D)
+	trap 'rm -f .tmp-$$$$' EXIT && \
+	$(find-toolchain) >.tmp-$$$$ && \
+	mv .tmp-$$$$ $@
+
+$(objtree)/cc.info: $(objtree)/toolchain.info
+	head -1 $< >$@
+
+$(objtree)/ld.info: $(objtree)/toolchain.info
+	tail -1 $< >$@

@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+source "scripts/Kconfig.include"
+
+mainmenu "$(repo-name)/$(build-host) $(repo-version) Configuration"
+
+source "scripts/Kconfig.compile"
+
+source "scripts/Kconfig.feature"

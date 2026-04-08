@@ -1,15 +1,24 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-objtree := build
+name := stash
+version := 0.0.0
+
+ifneq ($(filter extra-prereqs,$(.FEATURES)),extra-prereqs)
+  $(error GNU Make >= 4.3 is required. Your Make version is $(MAKE_VERSION))
+endif
+
+kconfigenv := KCONFIG_FUNCTIONS=kconfig PYTHONPATH=$(CURDIR)/scripts
+kconfiglib := $(kconfigenv) kconfiglib
+menuconfig := $(kconfiglib)/menuconfig.py
 
 find-toolchain := scripts/find-toolchain.py
 
-$(objtree)/toolchain.info:
-	mkdir -p $(@D)
-	$(find-toolchain) >$@
+objtree := build
 
-$(objtree)/cc.info: $(objtree)/toolchain.info
-	head -1 $< >$@
+include scripts/Makefile.helper
+include scripts/Makefile.toolchain
 
-$(objtree)/ld.info: $(objtree)/toolchain.info
-	tail -1 $< >$@
+.PHONY: menuconfig
+
+menuconfig: $(objtree)/cc.info $(objtree)/ld.info $(objtree)/repo.info
+	OBJTREE=$(objtree) MENUCONFIG_STYLE=aquatic $(menuconfig)
