@@ -19,7 +19,7 @@ toolchains = [
 ]
 
 def find_program(name):
-	binary = which(cc)
+	binary = which(name)
 
 	if binary:
 		return realpath(binary)
