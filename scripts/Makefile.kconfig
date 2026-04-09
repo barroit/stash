@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-ifneq ($(filter-out menuconfig $(clean_target),$(or $(MAKECMDGOALS),miku)),)
+ifneq ($(filter-out menuconfig clean distclean,$(or $(MAKECMDGOALS),miku)),)
   -include deps/auto.conf
 endif
 
@@ -10,8 +10,6 @@ kconfiglib := $(kconfigenv) kconfiglib
 
 menuconfig := $(kconfiglib)/menuconfig.py
 genconfig  := $(kconfiglib)/genconfig.py
-
-distclean += .config deps include/config.h
 
 .PHONY: menuconfig
 

@@ -14,5 +14,5 @@ git clean -xdf
 mkdir -p build
 cd build
 
-../Configure --release no-deprecated no-stdio no-sock
+CFLAGS=-O3 ../Configure --release no-deprecated no-stdio no-sock
 make -j build_sw
