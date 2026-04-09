@@ -25,10 +25,10 @@ ifneq ($(CONFIG_ENABLE_DEBUG),)
   CFLAGS += -fno-omit-frame-pointer
 endif
 
-ifneq ($(DEBUG_INFO_COMPRESS_ZLIB),)
+ifneq ($(CONFIG_DEBUG_INFO_COMPRESS_ZLIB),)
   CFLAGS += -gz=zlib
   LDFLAGS += -Wl,--compress-debug-sections=zlib
-else ifneq ($(DEBUG_INFO_COMPRESS_ZSTD),)
+else ifneq ($(CONFIG_DEBUG_INFO_COMPRESS_ZSTD),)
   CFLAGS += -gz=zstd
   LDFLAGS += -Wl,--compress-debug-sections=zstd
 endif
@@ -38,10 +38,10 @@ ifneq ($(CONFIG_ENABLE_SANITIZER),)
   LDFLAGS += -fsanitize=address,undefined
 endif
 
-ifneq ($(CC_IS_CLANG),)
+ifneq ($(CONFIG_CC_IS_CLANG),)
   LDFLAGS += --ld-path=$(CONFIG_LD_PROGRAM)
-else ifneq ($(CC_IS_GCC),)
-  LDFLAGS += -B$(dir $(CONFIG_LD_PROGRAM))
+else ifneq ($(CONFIG_CC_IS_GCC),)
+  LDFLAGS += -B$(shell dirname $(CONFIG_LD_PROGRAM))
 endif
 
 CFLAGS += -Wall \
