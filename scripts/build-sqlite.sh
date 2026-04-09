@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 if [ ! -d sqlite ]; then
-	git clone --single-branch git@github.com:sqlite/sqlite.git
+	git clone --single-branch https://github.com/sqlite/sqlite.git
 	git fetch --tags origin master
 fi
 
