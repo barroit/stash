@@ -1,7 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 /build
-/scripts/__pycache__
-
+/deps
 /.config
 /.config.old
+
+/scripts/__pycache__
+/include/config.h

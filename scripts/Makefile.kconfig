@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+ifneq ($(filter-out menuconfig $(clean_target),$(or $(MAKECMDGOALS),miku)),)
+  -include deps/auto.conf
+endif
+
+kconfigenv := KCONFIG_FUNCTIONS=kconfig PYTHONPATH=$(CURDIR)/scripts \
+	      OBJTREE=$(objtree)
+kconfiglib := $(kconfigenv) kconfiglib
+
+menuconfig := $(kconfiglib)/menuconfig.py
+genconfig  := $(kconfiglib)/genconfig.py
+
+distclean += .config deps include/config.h
+
+.PHONY: menuconfig
+
+menuconfig: $(objtree)/cc.info $(objtree)/ld.info $(objtree)/repo.info
+	MENUCONFIG_STYLE=aquatic $(menuconfig)
+
+deps/auto.conf: .config
+	$(genconfig) --sync-deps --header-path include/config.h
+
+.config:
+	$(error No .config found. Run 'make menuconfig' first)

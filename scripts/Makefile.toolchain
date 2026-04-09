@@ -1,21 +1,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-ifneq ($(filter-out clean distclean,$(or $(MAKECMDGOALS),miku)),)
-  ifneq ($(wildcard $(objtree)/toolchain.info),)
-    toolchain_diff != $(find-toolchain) | \
-		    diff - $(objtree)/toolchain.info | tr '\n' '@'
-    ifneq ($(toolchain_diff),)
-      $(error Toolchain mismatch $(LF) $(subst @,$(LF),$(toolchain_diff)))
-    endif
-  endif
-endif
+find-toolchain := scripts/find-toolchain.py
 
-clean += $(objtree)/repo.info $(objtree)/toolchain.info \
-	 $(objtree)/cc.info $(objtree)/ld.info
+$(objtree)/cc.info: $(objtree)/toolchain.info
+	head -1 $< >$@
 
-$(objtree)/repo.info:
-	mkdir -p $(@D)
-	printf '%s\t%s\n' $(name) $(version) >$@
+$(objtree)/ld.info: $(objtree)/toolchain.info
+	tail -1 $< >$@
 
 $(objtree)/toolchain.info:
 	mkdir -p $(@D)
@@ -23,8 +14,6 @@ $(objtree)/toolchain.info:
 	$(find-toolchain) >.tmp-$$$$ && \
 	mv .tmp-$$$$ $@
 
-$(objtree)/cc.info: $(objtree)/toolchain.info
-	head -1 $< >$@
-
-$(objtree)/ld.info: $(objtree)/toolchain.info
-	tail -1 $< >$@
+$(objtree)/repo.info:
+	mkdir -p $(@D)
+	printf '%s\t%s\n' $(name) $(version) >$@

@@ -7,25 +7,25 @@ ifneq ($(filter extra-prereqs,$(.FEATURES)),extra-prereqs)
   $(error GNU Make >= 4.3 is required. Your Make version is $(MAKE_VERSION))
 endif
 
-kconfigenv := KCONFIG_FUNCTIONS=kconfig PYTHONPATH=$(CURDIR)/scripts
-kconfiglib := $(kconfigenv) kconfiglib
-menuconfig := $(kconfiglib)/menuconfig.py
-
-find-toolchain := scripts/find-toolchain.py
-
 objtree := build
 
 clean :=
+distclean :=
+clean_target := clean distclean
 
 include scripts/Makefile.helper
 include scripts/Makefile.toolchain
+include scripts/Makefile.kconfig
 
-.PHONY: menuconfig
+ifneq ($(wildcard deps/auto.conf),)
+  CC := $(CONFIG_CC_PROGRAM)
+  LD := $(CONFIG_LD_PROGRAM)
+endif
 
-menuconfig: $(objtree)/cc.info $(objtree)/ld.info $(objtree)/repo.info
-	OBJTREE=$(objtree) MENUCONFIG_STYLE=aquatic $(menuconfig)
+.PHONY: clean distclean
 
-.PHONY: clean
+distclean: clean
+	rm -rf $(objtree) $(distclean)
 
 clean:
 	rm -f $(clean)
