@@ -32,20 +32,26 @@ config BUILD_PLATFORM
 config CC_PROGRAM
 	def_string $(cc)
 
+config CC_ID
+	def_string $(column,$(cc_info),2)
+
 config CC_VERSION
-	def_int $(column,$(cc_info),2)
+	def_int $(column,$(cc_info),3)
 
 config CC_NAME
-	def_string $(column,$(cc_info),3)
+	def_string $(column,$(cc_info),4)
 
 config LD_PROGRAM
 	def_string $(ld)
 
+config LD_ID
+	def_string $(column,$(ld_info),2)
+
 config LD_VERSION
-	def_int $(column,$(ld_info),2)
+	def_int $(column,$(ld_info),3)
 
 config LD_NAME
-	def_string $(column,$(ld_info),3)
+	def_string $(column,$(ld_info),4)
 
 config CC_IS_CLANG
 	def_bool CC_NAME = "Clang"

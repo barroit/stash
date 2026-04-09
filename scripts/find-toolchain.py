@@ -46,13 +46,15 @@ def try_cc(cc):
 
 	major = int(cols[1]) * 1000
 	minor = int(cols[2])
+
 	version = major + minor
+	id = name.lower()
 
 	if name == 'GCC' and version < 12 * 1000 or \
 	   name == 'Clang' and version < 18 * 1000:
 		return
 
-	return f"{program}\t{version}\t{name}"
+	return f"{program}\t{id}\t{version}\t{name}"
 
 def try_ld(ld):
 	__program = which(ld)
@@ -96,9 +98,11 @@ def try_ld(ld):
 	cols = version_str.split('.')
 	major = int(cols[0]) * 1000
 	minor = int(cols[1])
-	version = major + minor
 
-	return f"{program}\t{version}\t{name}"
+	version = major + minor
+	id = name.lower()
+
+	return f"{program}\t{id}\t{version}\t{name}"
 
 for [ cc, ld ] in toolchains:
 	if not cc or not ld:
