@@ -1,6 +1,8 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+set -e
+
 if [ ! -d sqlite ]; then
 	git clone --single-branch https://github.com/sqlite/sqlite.git
 	(cd sqlite && git fetch --tags origin master)

@@ -1,6 +1,8 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+set -e
+
 if [ ! -d openssl ]; then
 	git clone --single-branch https://github.com/openssl/openssl.git
 	(cd openssl && git fetch --tags origin master)

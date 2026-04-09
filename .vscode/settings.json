@@ -4,4 +4,9 @@
    "files.associations": {
       "**/scripts/Makefile.*": "makefile",
    },
+   "git.ignoredRepositories": [
+      "kconfiglib",
+      "openssl",
+      "sqlite",
+   ],
 }
