@@ -18,9 +18,14 @@ toolchains = [
 	[ 'cc',    'ld'     ],
 ]
 
+def find_program(name):
+	binary = which(cc)
+
+	if binary:
+		return realpath(binary)
+
 def try_cc(cc):
-	__program = which(cc)
-	program = realpath(__program)
+	program = find_program(cc)
 
 	if not program:
 		return
@@ -57,8 +62,7 @@ def try_cc(cc):
 	return f"{program}\t{id}\t{version}\t{name}"
 
 def try_ld(ld):
-	__program = which(ld)
-	program = realpath(__program)
+	program = find_program(ld)
 
 	if not program:
 		return
