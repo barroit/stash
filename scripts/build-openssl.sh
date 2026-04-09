@@ -3,7 +3,7 @@
 
 if [ ! -d openssl ]; then
 	git clone --single-branch https://github.com/openssl/openssl.git
-	git fetch --tags origin master
+	(cd openssl && git fetch --tags origin master)
 fi
 
 cd openssl

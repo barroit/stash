@@ -3,7 +3,7 @@
 
 if [ ! -d sqlite ]; then
 	git clone --single-branch https://github.com/sqlite/sqlite.git
-	git fetch --tags origin master
+	(cd sqlite && git fetch --tags origin master)
 fi
 
 cd sqlite
