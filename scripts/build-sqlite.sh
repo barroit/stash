@@ -16,4 +16,4 @@ cd build
 
 ../configure --all
 
-make OPTIONS=-DSQLITE_OMIT_DEPRECATED -j sqlite3
+make OPTIONS=-DSQLITE_OMIT_DEPRECATED -j sqlite3.c
