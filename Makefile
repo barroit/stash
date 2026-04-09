@@ -11,7 +11,6 @@ objtree := build
 
 $(objtree)/$(name):
 
-include scripts/Makefile.helper
 include scripts/Makefile.toolchain
 include scripts/Makefile.kconfig
 include scripts/Makefile.flags
