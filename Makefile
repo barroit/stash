@@ -16,8 +16,10 @@ include scripts/Makefile.toolchain
 include scripts/Makefile.kconfig
 include scripts/Makefile.flags
 
-CC := $(CONFIG_CC_PROGRAM)
-LD := $(CONFIG_LD_ID)
+ifneq ($(wildcard deps/auto.conf),)
+  CC := $(CONFIG_CC_PROGRAM)
+  LD := $(CONFIG_LD_ID)
+endif
 
 includes := include sqlite/build openssl/include openssl/build/include
 headers != find $(includes) -type f -name '*.h'
