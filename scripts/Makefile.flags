@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+CFLAGS :=
+LDFLAGS :=
+
+CFLAGS += -std=gnu17
+
+ifneq ($(CONFIG_CC_OPTIMIZE_NONE),)
+  CFLAGS += -O0
+else ifneq ($(CONFIG_CC_OPTIMIZE_O1),)
+  CFLAGS += -O1
+else ifneq ($(CONFIG_CC_OPTIMIZE_O2),)
+  CFLAGS += -O2
+else ifneq ($(CONFIG_CC_OPTIMIZE_O3),)
+  CFLAGS += -O3
+endif
+
+ifneq ($(CONFIG_DEBUG_INFO_DWARF4),)
+  CFLAGS += -gdwarf-4
+else ifneq ($(CONFIG_DEBUG_INFO_DWARF5),)
+  CFLAGS += -gdwarf-5
+endif
+
+ifneq ($(CONFIG_ENABLE_DEBUG),)
+  CFLAGS += -fno-omit-frame-pointer
+endif
+
+ifneq ($(DEBUG_INFO_COMPRESS_ZLIB),)
+  CFLAGS += -gz=zlib
+  LDFLAGS += -Wl,--compress-debug-sections=zlib
+else ifneq ($(DEBUG_INFO_COMPRESS_ZSTD),)
+  CFLAGS += -gz=zstd
+  LDFLAGS += -Wl,--compress-debug-sections=zstd
+endif
+
+ifneq ($(CONFIG_ENABLE_SANITIZER),)
+  CFLAGS += -fsanitize=address,undefined
+  LDFLAGS += -fsanitize=address,undefined
+endif
+
+ifneq ($(CC_IS_CLANG),)
+  LDFLAGS += --ld-path=$(CONFIG_LD_PROGRAM)
+else ifneq ($(CC_IS_GCC),)
+  LDFLAGS += -B$(dir $(CONFIG_LD_PROGRAM))
+endif
+
+CFLAGS += -Wall \
+	  -Wbad-function-cast \
+	  -Wformat-security \
+	  -Winit-self \
+	  -Wmissing-declarations \
+	  -Wmissing-prototypes \
+	  -Wnested-externs \
+	  -Wno-system-headers \
+	  -Wold-style-definition \
+	  -Wpacked \
+	  -Wstrict-prototypes \
+	  -Wno-switch \
+	  -Wshadow
+
+CFLAGS += -funsigned-char

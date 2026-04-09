@@ -2,5 +2,5 @@
 
 [codespell]
 
-skip = kconfiglib
+skip = kconfiglib,sqlite,openssl
 check-filenames = true

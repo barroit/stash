@@ -1,0 +1,16 @@
+{
+   "configurations": [
+      {
+         "name": "gcc",
+         "intelliSenseMode": "linux-gcc-x64",
+         "compilerPath": "${env:HOME}/.local/bin/gcc",
+         "includePath": [
+            "${default}",
+            "${workspaceFolder}/include",
+            "${workspaceFolder}/sqlite/build",
+            "${workspaceFolder}/openssl/build/include"
+         ]
+      },
+   ],
+   "version": 4
+}

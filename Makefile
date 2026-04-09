@@ -16,11 +16,23 @@ clean_target := clean distclean
 include scripts/Makefile.helper
 include scripts/Makefile.toolchain
 include scripts/Makefile.kconfig
+include scripts/Makefile.flags
 
-ifneq ($(wildcard deps/auto.conf),)
-  CC := $(CONFIG_CC_PROGRAM)
-  LD := $(CONFIG_LD_PROGRAM)
-endif
+CC := $(CONFIG_CC_PROGRAM)
+LD := $(CONFIG_LD_ID)
+
+$(objtree)/%.o: %.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -Iinclude -c -o $@ $<
+
+lib-y := lib/parse_args.o
+
+cmd-y := cmd/add.o
+
+main-y := main.o
+
+$(objtree)/$(name): $(addprefix $(objtree)/,$(main-y) $(cmd-y) $(lib-y))
+	$(CC) $(LDFLAGS) -fuse-ld=$(LD) -o $@ $^
 
 .PHONY: clean distclean
 

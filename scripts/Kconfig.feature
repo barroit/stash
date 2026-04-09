@@ -35,7 +35,7 @@ endmenu # Formatting options
 
 config NULL_DEVICE
 	string "Null device name"
-	default "NUL:" if $(os-type) = "nt"
+	default "NUL:" if PLATFORM_IS_NT
 	default "/dev/null"
 
 endmenu # Program features
