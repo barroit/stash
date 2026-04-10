@@ -30,8 +30,13 @@ cmd-y := cmd/add.o
 
 main-y := main.o
 
+link-y := openssl/build/libcrypto
+
+link-$(CONFIG_UNIX) := $(addsuffix .a,$(link-y))
+link-$(CONFIG_WIN32) := $(addsuffix .lib,$(link-y))
+
 $(objtree)/$(name): $(addprefix $(objtree)/,$(main-y) $(cmd-y) $(lib-y))
-	$(CC) $(LDFLAGS) -fuse-ld=$(LD) -o $@ $^ openssl/build/libcrypto.a
+	$(CC) $(LDFLAGS) -fuse-ld=$(LD) -o $@ $^ $(link-y)
 
 $(objtree)/sqlite/build/sqlite3.o: sqlite/build/sqlite3.c
 	mkdir -p $(@D)
