@@ -62,7 +62,7 @@ CFLAGS += -Wall \
 	  -Wno-switch \
 	  -Wshadow
 
-CFLAGS += -include$(CURDIR)/include/config.h
+CFLAGS += -include include/config.h
 
 CFLAGS += -Iinclude \
 	  -Isqlite/build \
