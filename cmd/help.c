@@ -4,10 +4,8 @@
  */
 
 #include "commands.h"
-#include <stdio.h>
 
-int cmd_add(int argc, const char **argv)
+int cmd_help(int argc, const char **argv)
 {
-	puts(*argv);
 	return 0;
 }

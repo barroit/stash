@@ -8,16 +8,13 @@ kconfigenv := KCONFIG_FUNCTIONS=kconfig PYTHONPATH=$(CURDIR)/scripts \
 	      OBJTREE=$(objtree)
 kconfiglib := $(kconfigenv) kconfiglib
 
-menuconfig := $(kconfiglib)/menuconfig.py
-genconfig  := $(kconfiglib)/genconfig.py
-
 .PHONY: menuconfig
 
 menuconfig: $(objtree)/cc.info $(objtree)/ld.info $(objtree)/repo.info
-	MENUCONFIG_STYLE=aquatic $(menuconfig)
+	MENUCONFIG_STYLE=aquatic $(kconfiglib)/menuconfig.py
 
-deps/auto.conf: .config
-	$(genconfig) --sync-deps --header-path include/config.h
+deps/auto.conf include/config.h: .config
+	$(kconfiglib)/genconfig.py --sync-deps --header-path include/config.h
 
 .config:
 	$(error No .config found. Run 'make menuconfig' first)

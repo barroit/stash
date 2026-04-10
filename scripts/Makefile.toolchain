@@ -1,7 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-find-toolchain := scripts/find-toolchain.py
-
 $(objtree)/cc.info: $(objtree)/toolchain.info
 	head -1 $< >$@
 
@@ -11,7 +9,7 @@ $(objtree)/ld.info: $(objtree)/toolchain.info
 $(objtree)/toolchain.info:
 	mkdir -p $(@D)
 	trap 'rm -f .tmp-$$$$' EXIT && \
-	$(find-toolchain) >.tmp-$$$$ && \
+	scripts/find-toolchain.py >.tmp-$$$$ && \
 	mv .tmp-$$$$ $@
 
 $(objtree)/repo.info:

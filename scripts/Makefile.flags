@@ -44,6 +44,10 @@ else ifneq ($(CONFIG_USE_GCC),)
   LDFLAGS += -B$(shell dirname $(CONFIG_LD_PROGRAM))
 endif
 
+CFLAGS += -funsigned-char
+
+CFLAGS += -MMD -MP
+
 CFLAGS += -Wall \
 	  -Wbad-function-cast \
 	  -Wformat-security \
@@ -58,4 +62,9 @@ CFLAGS += -Wall \
 	  -Wno-switch \
 	  -Wshadow
 
-CFLAGS += -funsigned-char
+CFLAGS += -include$(CURDIR)/include/config.h
+
+CFLAGS += -Iinclude \
+	  -Isqlite/build \
+	  -Iopenssl/include \
+	  -Iopenssl/build/include

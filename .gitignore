@@ -2,11 +2,15 @@
 
 /build
 /deps
+/scripts/__pycache__
+
 /.config
 /.config.old
+/.commands
 
-/scripts/__pycache__
 /include/config.h
+/include/commands.h
+/commands.c
 
 /openssl
 /sqlite
