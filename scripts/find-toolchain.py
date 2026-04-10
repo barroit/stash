@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from os import environ
-from os.path import realpath
+from os.path import realpath, isabs
 from shutil import which
 from subprocess import run
 from sys import exit
@@ -22,6 +22,9 @@ def find_program(name):
 	binary = which(name)
 
 	if binary:
+		if isabs(binary):
+			return binary
+
 		return realpath(binary)
 
 def try_cc(cc):
