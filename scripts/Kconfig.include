@@ -53,14 +53,14 @@ config LD_VERSION
 config LD_NAME
 	def_string $(column,$(ld_info),4)
 
-config CC_IS_CLANG
+config USE_CLANG
 	def_bool CC_NAME = "Clang"
 
-config CC_IS_GCC
+config USE_GCC
 	def_bool CC_NAME = "GCC"
 
-config PLATFORM_IS_WIN32
+config WIN32
 	def_bool $(os-type) = "nt"
 
-config PLATFORM_IS_UNIX
+config UNIX
 	def_bool $(os-type) = "posix"

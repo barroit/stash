@@ -38,9 +38,9 @@ ifneq ($(CONFIG_ENABLE_SANITIZER),)
   LDFLAGS += -fsanitize=address,undefined
 endif
 
-ifneq ($(CONFIG_CC_IS_CLANG),)
+ifneq ($(CONFIG_USE_CLANG),)
   LDFLAGS += --ld-path=$(CONFIG_LD_PROGRAM)
-else ifneq ($(CONFIG_CC_IS_GCC),)
+else ifneq ($(CONFIG_USE_GCC),)
   LDFLAGS += -B$(shell dirname $(CONFIG_LD_PROGRAM))
 endif
 
