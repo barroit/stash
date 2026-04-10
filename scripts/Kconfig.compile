@@ -84,4 +84,8 @@ config LIST_CHECK_CHANGE
 
 endmenu # List options
 
+comment "====== Build Tools ======"
+comment "  $(cc)"
+comment "  $(ld)"
+
 endmenu # Compile options
