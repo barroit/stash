@@ -29,8 +29,17 @@ lib-obj := $(addprefix $(objtree)/,$(lib-src:.c=.o))
 
 $(objtree)/$(name):
 
+ifneq ($(filter-out menuconfig clean distclean,$(or $(MAKECMDGOALS),miku)),)
+  eval_build_env := 1
+endif
+
+# .config exits means build environments, like CC and LD are dumped to file.
+.config:
+	$(error No .config found. Run 'make menuconfig' first)
+
 include scripts/Makefile.toolchain
 include scripts/Makefile.kconfig
+include scripts/Makefile.feature
 include scripts/Makefile.flags
 
 ifneq ($(wildcard deps/auto.conf),)

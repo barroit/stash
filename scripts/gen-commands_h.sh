@@ -11,7 +11,7 @@ cat <<EOF
 
 struct command {
 	const char *name;
-	int (*routine)(int argc, const char **argv);
+	int (*routine)(int, const char **);
 };
 
 $(sed 's/\(.*\)\.c/int cmd_\1(int argc, const char **argv);/')

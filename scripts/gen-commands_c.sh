@@ -12,6 +12,6 @@ cat <<EOF
 
 struct command commands[] = {
 $(sed 's/\(.*\)\.c/\t{ .name = "\1", .routine = cmd_\1 },/')
-	{ 0 },
+	{ .name = NULL, .routine = NULL },
 };
 EOF

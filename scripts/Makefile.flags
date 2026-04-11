@@ -44,6 +44,10 @@ else ifneq ($(CONFIG_USE_GCC),)
   LDFLAGS += -B$(shell dirname $(CONFIG_LD_PROGRAM))
 endif
 
+ifneq ($(CC_HAS_TOPLEVEL_REORDER),)
+  CFLAGS += -fno-toplevel-reorder
+endif
+
 CFLAGS += -funsigned-char
 
 CFLAGS += -MMD -MP
@@ -68,3 +72,21 @@ CFLAGS += -Iinclude \
 	  -Isqlite/build \
 	  -Iopenssl/include \
 	  -Iopenssl/build/include
+
+CFLAGS += -D_GNU_SOURCE
+
+ifeq ($(CONFIG_ENABLE_DEBUG),)
+  CFLAGS += -DNDEBUG
+endif
+
+ifneq ($(CONFIG_WIN32),)
+  CFLAGS += -DNTDDI_WIN7 \
+	    -DWINVER=_WIN32_WINNT_WIN7 \
+	    -D_WIN32_WINNT=_WIN32_WINNT_WIN7 \
+	    -DWIN32_LEAN_AND_MEAN
+
+  # https://learn.microsoft.com/en-us/cpp/c-runtime-library/compatibility
+  CFLAGS += -D_CRT_NONSTDC_NO_WARNINGS \
+	    -D_CRT_DECLARE_NONSTDC_NAMES \
+	    -D_CRT_SECURE_NO_WARNINGS
+endif
