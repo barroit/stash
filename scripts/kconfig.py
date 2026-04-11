@@ -1,15 +1,28 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import os
-from os import devnull, environ, getpid, unlink
-from os.path import isfile
-from platform import machine, system
-from subprocess import DEVNULL, run
+from os import environ
 
 objtree = environ['OBJTREE']
 
-def head(pathname):
-	file = open(pathname, 'r')
+repo_info_dir = f"{objtree}/repo"
+host_info_dir = f"{objtree}/host"
+tool_info_dir = f"{objtree}/tool"
+
+format_feature = lambda line: line.split('=')[0]
+
+cc_feature_file = open(f"{tool_info_dir}/cc_features")
+cc_feature_lines = cc_feature_file.read().splitlines()
+cc_features = set(map(format_feature, cc_feature_lines))
+
+ld_feature_file = open(f"{tool_info_dir}/ld_features")
+ld_feature_lines = ld_feature_file.read().splitlines()
+ld_features = set(map(format_feature, ld_feature_lines))
+
+cc_feature_file.close()
+ld_feature_file.close()
+
+def first_line(file):
+	file = open(file, 'r')
 	line = file.readline().rstrip()
 
 	file.close()
@@ -19,66 +32,37 @@ def warn_off(kconf, name):
 	kconf.warn = False
 	return ''
 
-def os_type(kconf, name):
-	return os.name
+def host_id(kconf, name):
+	return first_line(f"{host_info_dir}/id")
 
-def column(kconf, name, row, at):
-	cols = row.split('\t')
-	idx = int(at) - 1
+def host_arch(kconf, name):
+	return first_line(f"{host_info_dir}/arch")
 
-	return cols[idx]
+def host_name(kconf, name):
+	return first_line(f"{host_info_dir}/name")
 
-def repo_info(kconf, name):
-	return head(f"{objtree}/repo.info")
+def repo_name(kconf, name):
+	return first_line(f"{repo_info_dir}/name")
 
-def build_info(kconf, name):
-	arch = machine().lower()
-	platform = system()
+def repo_version(kconf, name):
+	return first_line(f"{repo_info_dir}/version")
 
-	return f"{arch}\t{platform}"
+def cc_has_feature(kconf, name, feature):
+	return 'y' if f"CC_HAS_{feature}" in cc_features else 'n'
 
-def cc_info(kconf, name):
-	return head(f"{objtree}/cc.info")
-
-def ld_info(kconf, name):
-	return head(f"{objtree}/ld.info")
-
-def test_cc_flag(kconf, name, cc, flag):
-	pid = getpid()
-	tmp = f".tmp-{pid}"
-
-	cmd = [ cc, '-Werror', flag, '-c', '-x', 'c', devnull, '-o', devnull ]
-	res = run(cmd, stdout=DEVNULL, stderr=DEVNULL)
-
-	if isfile(tmp):
-		unlink(tmp)
-
-	if res.returncode == 0:
-		return 'y'
-	else:
-		return 'n'
-
-def test_ld_flag(kconf, name, ld, flag):
-	cmd = [ ld, '-v', flag ]
-	res = run(cmd, stdout=DEVNULL, stderr=DEVNULL)
-
-	if res.returncode == 0:
-		return 'y'
-	else:
-		return 'n'
+def ld_has_feature(kconf, name, feature):
+	return 'y' if f"LD_HAS_{feature}" in ld_features else 'n'
 
 functions = {
 	'warn-off': (warn_off, 0, 0),
 
-	'os-type': (os_type, 0, 0),
+	'host-id': (host_id, 0, 0),
+	'host-arch': (host_arch, 0, 0),
+	'host-name': (host_name, 0, 0),
 
-	'column': (column, 2, 2),
+	'repo-name': (repo_name, 0, 0),
+	'repo-version': (repo_version, 0, 0),
 
-	'repo-info': (repo_info, 0, 0),
-	'build-info': (build_info, 0, 0),
-	'cc-info': (cc_info, 0, 0),
-	'ld-info': (ld_info, 0, 0),
-
-	'test-cc-flag': (test_cc_flag, 2, 2),
-	'test-ld-flag': (test_ld_flag, 2, 2),
+	'cc-has-feature': (cc_has_feature, 1, 1),
+	'ld-has-feature': (ld_has_feature, 1, 1),
 }

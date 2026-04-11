@@ -1,0 +1,81 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+tool_info_item := cc cc_id cc_version cc_name ld ld_id ld_version ld_name \
+		  cc_features ld_features
+tool_info_dir := $(objtree)/tool
+tool_info_dump := $(addprefix $(tool_info_dir)/,$(tool_info_item))
+
+repo_info_item := name version
+repo_info_dir := $(objtree)/repo
+repo_info_dump := $(addprefix $(repo_info_dir)/,$(repo_info_item))
+
+host_info_item := id arch name
+host_info_dir := $(objtree)/host
+host_info_dump := $(addprefix $(host_info_dir)/,$(host_info_item))
+
+bootstrap: $(repo_info_dump) $(host_info_dump) $(tool_info_dump)
+
+$(repo_info_dir)/name:
+	mkdir -p $(@D)
+	printf '%s\n' $(name) >$@
+
+$(repo_info_dir)/version:
+	mkdir -p $(@D)
+	printf '%s\n' $(version) >$@
+
+$(host_info_dir)/id:
+	mkdir -p $(@D)
+	python3 -c 'import sys; print(sys.platform)' >$@
+
+$(host_info_dir)/arch:
+	mkdir -p $(@D)
+	python3 -c 'import platform; print(platform.machine())' >$@
+
+$(host_info_dir)/name:
+	mkdir -p $(@D)
+	python3 -c 'import platform; print(platform.system())' >$@
+
+$(tool_info_dir)/cc: $(tool_info_dir)/cc_dump
+	cut -f1 $< >$@
+
+$(tool_info_dir)/cc_id: $(tool_info_dir)/cc_dump
+	cut -f2 $< >$@
+
+$(tool_info_dir)/cc_version: $(tool_info_dir)/cc_dump
+	cut -f3 $< >$@
+
+$(tool_info_dir)/cc_name: $(tool_info_dir)/cc_dump
+	cut -f4 $< >$@
+
+$(tool_info_dir)/cc_dump: $(tool_info_dir)/dump
+	sed -n 1p $< >$@
+
+$(tool_info_dir)/cc_features:
+
+$(tool_info_dir)/ld: $(tool_info_dir)/ld_dump
+	cut -f1 $< >$@
+
+$(tool_info_dir)/ld_id: $(tool_info_dir)/ld_dump
+	cut -f2 $< >$@
+
+$(tool_info_dir)/ld_version: $(tool_info_dir)/ld_dump
+	cut -f3 $< >$@
+
+$(tool_info_dir)/ld_name: $(tool_info_dir)/ld_dump
+	cut -f4 $< >$@
+
+$(tool_info_dir)/ld_dump: $(tool_info_dir)/dump
+	sed -n 2p $< >$@
+
+$(tool_info_dir)/ld_features:
+
+$(tool_info_dir)/dump:
+	mkdir -p $(@D)
+	trap 'rm -f .tmp-$$$$' EXIT && \
+	./scripts/probe-tools.sh >.tmp-$$$$ && \
+	mv .tmp-$$$$ $@
+
+$(tool_info_dir)/%_features: $(tool_info_dir)/%
+	trap 'rm -f .tmp-$$$$' EXIT && \
+	./scripts/probe-$*-features.sh $$(cat $<) | sort >.tmp-$$$$ && \
+	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || mv .tmp-$$$$ $@

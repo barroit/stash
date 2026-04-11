@@ -54,13 +54,13 @@ config DEBUG_INFO_COMPRESS_NONE
 
 config DEBUG_INFO_COMPRESS_ZLIB
 	bool "Compress debug information with zlib"
-	depends on $(test-cc-flag,$(cc),-gz=zlib)
-	depends on $(test-ld-flag,$(ld),--compress-debug-sections=zlib)
+	depends on $(cc-has-feature,GZ_ZLIB)
+	depends on $(ld-has-feature,COMPRESS_DEBUG_SECTIONS_ZLIB)
 
 config DEBUG_INFO_COMPRESS_ZSTD
 	bool "Compress debug information with zstd"
-	depends on $(test-cc-flag,$(cc),-gz=zstd)
-	depends on $(test-ld-flag,$(ld),--compress-debug-sections=zstd)
+	depends on $(cc-has-feature,GZ_ZSTD)
+	depends on $(ld-has-feature,COMPRESS_DEBUG_SECTIONS_ZSTD)
 
 endchoice # Compress debug information
 
@@ -83,9 +83,5 @@ config LIST_CHECK_CHANGE
 	default ENABLE_DEBUG
 
 endmenu # List options
-
-comment "====== Build Tools ======"
-comment "  $(cc)"
-comment "  $(ld)"
 
 endmenu # Compile options

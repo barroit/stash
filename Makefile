@@ -29,26 +29,38 @@ lib-obj := $(addprefix $(objtree)/,$(lib-src:.c=.o))
 
 $(objtree)/$(name):
 
-ifneq ($(filter-out menuconfig clean distclean,$(or $(MAKECMDGOALS),miku)),)
-  eval_build_env := 1
+# probe repo info, host info, cc/ld program, cc/ld features -> kconfig
+include scripts/Makefile.probe
+include scripts/Makefile.kconfig
+
+off_build_targets := bootstrap menuconfig clean distclean \
+		     $(repo_info_dump) $(host_info_dump) $(tool_info_dump)
+
+ifneq ($(filter-out $(off_build_targets),$(or $(MAKECMDGOALS),miku)),)
+  # The following are environments for compiling/linking.
+
+  include $(tool_info_dir)/cc_features
+  include $(tool_info_dir)/ld_features
+  include $(kconfig_dir)/deps/auto.conf
+
+  # At this point, the probe results and configurations must already have been
+  # populated.
+  ifneq ($(wildcard $(kconfig_dir)/dump),)
+    CC != cat $(tool_info_dir)/cc
+    LD != cat $(tool_info_dir)/ld_id
+
+    UNIX != test $$(cat $(host_info_dir)/id) != win32 && printf y
+    WIN32 != test $$(cat $(host_info_dir)/id) = win32 && printf y
+
+    USE_GCC != test $$(cat $(tool_info_dir)/cc_id) = gcc && printf y
+    USE_CLANG != test $$(cat $(tool_info_dir)/cc_id) = clang && printf y
+  endif
 endif
 
-# .config exits means build environments, like CC and LD are dumped to file.
-.config:
-	$(error No .config found. Run 'make menuconfig' first)
-
-include scripts/Makefile.toolchain
-include scripts/Makefile.kconfig
-include scripts/Makefile.feature
 include scripts/Makefile.flags
 
-ifneq ($(wildcard deps/auto.conf),)
-  CC := $(CONFIG_CC_PROGRAM)
-  LD := $(CONFIG_LD_ID)
-endif
-
-link-$(CONFIG_UNIX) := $(addsuffix .a,$(link-src))
-link-$(CONFIG_WIN32) := $(addsuffix .lib,$(link-src))
+link-$(UNIX) := $(addsuffix .a,$(link-src))
+link-$(WIN32) := $(addsuffix .lib,$(link-src))
 
 obj-y := $(main-obj) $(cmd-obj) $(lib-obj)
 
@@ -69,17 +81,17 @@ $(objtree)/stash-%: $(objtree)/cmd/main_%.o $(objtree)/cmd/%.o $(lib-obj)
 	$(CC) $(LDFLAGS) -fuse-ld=$(LD) $^ -o $@
 
 cmd/main_%.c:
-	scripts/gen-command-entry.sh $* >$@
+	./scripts/gen-command-entry.sh $* >$@
 
 $(objtree)/sqlite/build/sqlite3.o: sqlite/build/sqlite3.c
 	mkdir -p $(@D)
 	$(CC) -O3 -w -c $< -o $@
 
-sqlite/build/sqlite3.c openssl/build/libcrypto.a:
+sqlite/build/sqlite3.c openssl/build/libcrypto.a openssl/build/libcrypto.lib:
 	$(error No $@ found. \
 		Run 'scripts/build-$(firstword $(subst /, ,$@)).sh' first)
 
-$(objtree)/main.o: $(objtree)/commands.o
+$(objtree)/main.o $(cmd-obj): $(objtree)/commands.o
 
 $(objtree)/%.o: %.c include/config.h
 	mkdir -p $(@D)
@@ -87,13 +99,13 @@ $(objtree)/%.o: %.c include/config.h
 
 -include $(obj-y:.o=.d)
 
-commands.c: include/commands.h .commands
-	printf '%s\n' $(notdir $(cmd-src)) | scripts/gen-commands_c.sh >$@
+commands.c: include/commands.h build/commands
+	printf '%s\n' $(notdir $(cmd-src)) | ./scripts/gen-commands_c.sh >$@
 
-include/commands.h: .commands
-	printf '%s\n' $(notdir $(cmd-src)) | scripts/gen-commands_h.sh >$@
+include/commands.h: build/commands
+	printf '%s\n' $(notdir $(cmd-src)) | ./scripts/gen-commands_h.sh >$@
 
-.commands: .force
+build/commands: .force
 	@trap 'rm -f .tmp-$$$$' EXIT && \
 	printf '%s\n' $(cmd-src) | sort >.tmp-$$$$ && \
 	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || mv .tmp-$$$$ $@
@@ -103,12 +115,11 @@ include/commands.h: .commands
 .PHONY: clean distclean
 
 distclean: clean
-	rm -rf build deps
-	rm -f .config*
+	rm -rf build
 
 clean:
 	test -d $(objtree) && \
 	find $(objtree) \( -name '*.o' -o -name '*.d' \) ! -name sqlite3.o \
 			-exec rm {} + || true
 	rm -f commands.c include/commands.h include/config.h \
-	      $(objtree)/$(name) $(objtree)/$(name)-*
+	      $(objtree)/commands $(objtree)/$(name) $(objtree)/$(name)-*

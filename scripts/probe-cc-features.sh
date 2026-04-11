@@ -3,30 +3,52 @@
 
 set -e
 
-read cc
+cc=$1
+
+trap 'rm -f .tmp-$$.*' EXIT
 
 probe_feature()
 {
 	read name
-	read flag
+	read flags
 
-	cat | $cc $flag -Werror -S -x c -o /dev/null - 2>/dev/null && \
+	cat >.tmp-$$.$name
+
+	# Compile and assemble for flag-only tests.
+	test -s .tmp-$$.$name && mode=-S || mode=-c
+
+	$cc $flags -Werror $mode -x c -o /dev/null - 2>/dev/null && \
 	printf '%s=y\n' $name || true
 }
 
-cat <<'EOF' | probe_feature &
+probe_feature <<'EOF' &
+CC_HAS_TOPLEVEL_REORDER
+-ftoplevel-reorder
+EOF
+
+probe_feature <<'EOF' &
+CC_HAS_GZ_ZLIB
+-g -gz=zlib
+EOF
+
+probe_feature <<'EOF' &
+CC_HAS_GZ_ZSTD
+-g -gz=zstd
+EOF
+
+probe_feature <<'EOF' &
 CC_HAS_BUILTIN_ALIGN_UP
 
 int x = __builtin_align_up(8, 4);
 EOF
 
-cat <<'EOF' | probe_feature &
+probe_feature <<'EOF' &
 CC_HAS_BUILTIN_ALIGN_DOWN
 
 int x = __builtin_align_down(8, 4);
 EOF
 
-cat <<'EOF' | probe_feature &
+probe_feature <<'EOF' &
 CC_HAS_REALLOCARRAY
 -D_GNU_SOURCE
 
@@ -40,7 +62,7 @@ static void a(void)
 }
 EOF
 
-cat <<'EOF' | probe_feature &
+probe_feature <<'EOF' &
 CC_HAS_SSIZE_T
 -D_GNU_SOURCE
 
@@ -49,12 +71,7 @@ CC_HAS_SSIZE_T
 ssize_t a = 0;
 EOF
 
-cat <<'EOF' | probe_feature &
-CC_HAS_TOPLEVEL_REORDER
--ftoplevel-reorder
-EOF
-
-cat <<'EOF' | probe_feature &
+probe_feature <<'EOF' &
 __unix__
 
 /*

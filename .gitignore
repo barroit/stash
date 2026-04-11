@@ -4,10 +4,7 @@
 /deps
 /scripts/__pycache__
 
-/.config
-/.config.old
-/.commands
-
+/cmd/main_*.c
 /include/config.h
 /include/commands.h
 /commands.c

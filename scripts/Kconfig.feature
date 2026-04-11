@@ -35,7 +35,7 @@ endmenu # Formatting options
 
 config NULL_DEVICE
 	string "Null device name"
-	default "NUL:" if WIN32
+	default "NUL:" if $(host-id) = win32
 	default "/dev/null"
 
 endmenu # Program features

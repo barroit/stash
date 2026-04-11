@@ -5,6 +5,12 @@ LDFLAGS :=
 
 CFLAGS += -std=gnu17
 
+ifneq ($(USE_CLANG),)
+  LDFLAGS += --ld-path=$(LD)
+else ifneq ($(USE_GCC),)
+  LDFLAGS += -B$(shell dirname $(LD))
+endif
+
 ifneq ($(CONFIG_CC_OPTIMIZE_NONE),)
   CFLAGS += -O0
 else ifneq ($(CONFIG_CC_OPTIMIZE_O1),)
@@ -36,12 +42,6 @@ endif
 ifneq ($(CONFIG_ENABLE_SANITIZER),)
   CFLAGS += -fsanitize=address,undefined
   LDFLAGS += -fsanitize=address,undefined
-endif
-
-ifneq ($(CONFIG_USE_CLANG),)
-  LDFLAGS += --ld-path=$(CONFIG_LD_PROGRAM)
-else ifneq ($(CONFIG_USE_GCC),)
-  LDFLAGS += -B$(shell dirname $(CONFIG_LD_PROGRAM))
 endif
 
 ifneq ($(CC_HAS_TOPLEVEL_REORDER),)
