@@ -9,4 +9,8 @@
       "openssl",
       "sqlite",
    ],
+   "search.exclude": {
+      "**/openssl": true,
+      "**/sqlite": true,
+   },
 }

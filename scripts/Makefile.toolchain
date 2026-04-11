@@ -8,9 +8,7 @@ $(objtree)/ld.info: $(objtree)/toolchain.info
 
 $(objtree)/toolchain.info:
 	mkdir -p $(@D)
-	trap 'rm -f .tmp-$$$$' EXIT && \
-	scripts/find-toolchain.py >.tmp-$$$$ && \
-	mv .tmp-$$$$ $@
+	./scripts/probe-tools.sh >$@ || rm $@
 
 $(objtree)/repo.info:
 	mkdir -p $(@D)
