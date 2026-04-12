@@ -7,6 +7,7 @@
 /cmd/main_*.c
 /include/config.h
 /include/commands.h
+/include/build.h
 /commands.c
 
 /openssl

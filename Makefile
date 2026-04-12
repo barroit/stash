@@ -11,22 +11,6 @@ MAKEFLAGS += -rR
 
 objtree := build
 
-lib-src := sqlite/build/sqlite3.c \
-	   lib/parse_argv.c
-
-cmd-src := cmd/add.c \
-	   cmd/help.c \
-	   cmd/search.c \
-	   cmd/version.c
-
-main-src := main.c commands.c
-
-link-src := openssl/build/libcrypto
-
-main-obj := $(addprefix $(objtree)/,$(main-src:.c=.o))
-cmd-obj := $(addprefix $(objtree)/,$(cmd-src:.c=.o))
-lib-obj := $(addprefix $(objtree)/,$(lib-src:.c=.o))
-
 $(objtree)/$(name):
 
 # probe repo info, host info, cc/ld program, cc/ld features -> kconfig
@@ -58,6 +42,22 @@ ifneq ($(filter-out $(off_build_targets),$(or $(MAKECMDGOALS),miku)),)
 endif
 
 include scripts/Makefile.flags
+
+lib-src := sqlite/build/sqlite3.c \
+	   lib/parse_argv.c
+
+cmd-src := cmd/add.c \
+	   cmd/help.c \
+	   cmd/search.c \
+	   cmd/version.c
+
+main-src := main.c commands.c
+
+link-src := openssl/build/libcrypto
+
+main-obj := $(addprefix $(objtree)/,$(main-src:.c=.o))
+cmd-obj := $(addprefix $(objtree)/,$(cmd-src:.c=.o))
+lib-obj := $(addprefix $(objtree)/,$(lib-src:.c=.o))
 
 link-$(UNIX) := $(addsuffix .a,$(link-src))
 link-$(WIN32) := $(addsuffix .lib,$(link-src))
@@ -93,9 +93,10 @@ sqlite/build/sqlite3.c openssl/build/libcrypto.a openssl/build/libcrypto.lib:
 
 $(objtree)/main.o $(cmd-obj): $(objtree)/commands.o
 
-$(objtree)/%.o: %.c include/config.h
+$(objtree)/%.o: %.c include/build.h include/config.h
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(addprefix -include ,$(filter include/%,$^)) \
+	      -c $< -o $@
 
 -include $(obj-y:.o=.d)
 
@@ -121,5 +122,5 @@ clean:
 	test -d $(objtree) && \
 	find $(objtree) \( -name '*.o' -o -name '*.d' \) ! -name sqlite3.o \
 			-exec rm {} + || true
-	rm -f commands.c include/commands.h include/config.h \
+	rm -f commands.c include/build.h include/config.h include/commands.h \
 	      $(objtree)/commands $(objtree)/$(name) $(objtree)/$(name)-*

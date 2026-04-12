@@ -66,8 +66,6 @@ CFLAGS += -Wall \
 	  -Wno-switch \
 	  -Wshadow
 
-CFLAGS += -include include/config.h
-
 CFLAGS += -Iinclude \
 	  -Isqlite/build \
 	  -Iopenssl/include \
