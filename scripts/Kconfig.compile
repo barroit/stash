@@ -72,10 +72,6 @@ config ENABLE_SANITIZER
 	select IGNORE_ANNOT_LEAKS
 	default ENABLE_DEBUG
 
-config DEBUG_INTL
-	bool "Link against non-inline intl functions"
-	depends on ENABLE_I18N
-
 menu "List options"
 
 config LIST_CHECK_CHANGE

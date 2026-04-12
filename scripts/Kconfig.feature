@@ -2,17 +2,6 @@
 
 menu "Program features"
 
-menuconfig ENABLE_I18N
-	bool "Enable i18n support"
-
-if ENABLE_I18N
-
-config TEXT_DOMAIN
-	string "GNU gettext text domain"
-	default $(repo-name)
-
-endif # ENABLE_I18N
-
 menu "Formatting options"
 
 config CNTL_CHAR_REPL

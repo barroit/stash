@@ -1,16 +1,15 @@
 {
    "configurations": [
       {
-         "name": "gcc",
+         "name": "ubuntu",
          "intelliSenseMode": "linux-gcc-x64",
          "compilerPath": "${env:HOME}/.local/bin/gcc",
-         "includePath": [
-            "${default}",
-            "${workspaceFolder}/include",
-            "${workspaceFolder}/sqlite/build",
-            "${workspaceFolder}/openssl/build/include"
-         ]
+      },
+      {
+         "name": "macos",
+         "intelliSenseMode": "linux-clang-arm64",
+         "compilerPath": "/opt/homebrew/opt/llvm/bin/clang",
       },
    ],
-   "version": 4
+   "version": 4,
 }

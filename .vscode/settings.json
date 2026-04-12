@@ -13,4 +13,14 @@
       "openssl",
       "sqlite",
    ],
+   "C_Cpp.default.includePath": [
+      "${workspaceFolder}/include",
+      "${workspaceFolder}/sqlite/build",
+      "${workspaceFolder}/openssl/build/include",
+   ],
+   "C_Cpp.default.forcedInclude": [
+      "${workspaceFolder}/include/build.h",
+      "${workspaceFolder}/include/commands.h",
+      "${workspaceFolder}/include/config.h",
+   ],
 }
