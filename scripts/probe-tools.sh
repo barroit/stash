@@ -3,28 +3,38 @@
 
 set -e
 
-trap 'rm -f .tmp-$$' EXIT
+trap 'rm -f .tmp-$$*' EXIT
 
 scripts=$(dirname $0)
 
-while read cc ld; do
-	test -n "$cc" && test -n "$ld" || continue
+test -n "$cc" && test -n "$ld" && cat <<EOF >>.tmp-$$.in
+$CC	$LD
+EOF
 
+test $(python3 -c 'import sys; print(sys.platform)') = darwin && \
+cat <<EOF >>.tmp-$$.in
+clang	ld64.lld
+EOF
+
+test $(python3 -c 'import sys; print(sys.platform)') = win32 && \
+cat <<EOF >>.tmp-$$.in
+clang	ld.lld
+EOF
+
+cat <<EOF >>.tmp-$$.in
+gcc	ld.bfd
+clang	ld.lld
+EOF
+
+while read cc ld; do
 	cc=$($scripts/which.py $cc) || continue
 	ld=$($scripts/which.py $ld) || continue
 
 	$scripts/probe-cc.sh $cc >.tmp-$$ || continue
-	$scripts/probe-ld.sh $ld >>.tmp-$$ || continue
+	$scripts/probe-ld.sh $ld $cc >>.tmp-$$ || continue
 
 	cat .tmp-$$
 	exit
-
-done <<EOF
-$CC	$LD
-gcc	ld.bfd
-clang	ld64.lld
-clang	ld.lld
-cc	ld
-EOF
+done <.tmp-$$.in
 
 exit 1

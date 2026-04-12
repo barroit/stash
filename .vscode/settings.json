@@ -8,4 +8,9 @@
       "**/openssl": true,
       "**/sqlite": true,
    },
+   "git.ignoredRepositories": [
+      "kconfiglib",
+      "openssl",
+      "sqlite",
+   ],
 }

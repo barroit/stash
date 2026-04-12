@@ -70,7 +70,7 @@ $(tool_info_dir)/ld_name: $(tool_info_dir)/ld_dump
 $(tool_info_dir)/ld_dump: $(tool_info_dir)/dump
 	sed -n 2p $< >$@
 
-$(tool_info_dir)/ld_features:
+$(tool_info_dir)/ld_features: $(tool_info_dir)/cc $(tool_info_dir)/ld_id
 
 $(tool_info_dir)/dump:
 	mkdir -p $(@D)
@@ -80,5 +80,5 @@ $(tool_info_dir)/dump:
 
 $(tool_info_dir)/%_features: $(tool_info_dir)/%
 	trap 'rm -f .tmp-$$$$' EXIT && \
-	./scripts/probe-$*-features.sh $$(cat $<) | sort >.tmp-$$$$ && \
+	./scripts/probe-$*-features.sh $$(cat $^) | sort >.tmp-$$$$ && \
 	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || mv .tmp-$$$$ $@
