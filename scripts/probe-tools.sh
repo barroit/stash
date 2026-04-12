@@ -22,6 +22,7 @@ while read cc ld; do
 done <<EOF
 $CC	$LD
 gcc	ld.bfd
+clang	ld64.lld
 clang	ld.lld
 cc	ld
 EOF
