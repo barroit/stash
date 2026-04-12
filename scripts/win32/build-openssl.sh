@@ -9,7 +9,7 @@ git clean -xdf
 mkdir -p build
 cd build
 
-vcvarsall=$(../../scripts/nt/find-vcvarsall.sh)
+vcvarsall=$(../../scripts/win32/find-vcvarsall.sh)
 jom=../../jom/jom.exe
 
 export PATH=/c/Strawberry/perl/bin/:$PATH
