@@ -3,14 +3,7 @@
 
 set -e
 
-if [ ! -d openssl ]; then
-	git clone --single-branch https://github.com/openssl/openssl.git
-	(cd openssl && git fetch --tags origin master)
-fi
-
 cd openssl
-
-git checkout openssl-3.6.2
 git clean -xdf
 
 mkdir -p build

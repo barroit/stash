@@ -1,3 +1,13 @@
 [submodule "kconfiglib"]
 	path = kconfiglib
 	url = https://github.com/zephyrproject-rtos/Kconfiglib.git
+
+[submodule "openssl"]
+	path = openssl
+	url = https://github.com/openssl/openssl.git
+	ignore = untracked
+
+[submodule "sqlite"]
+	path = sqlite
+	url = https://github.com/sqlite/sqlite.git
+	ignore = untracked
