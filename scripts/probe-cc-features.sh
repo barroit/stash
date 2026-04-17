@@ -77,8 +77,8 @@ __unix__
 /*
  * Only macOS lacks this.
  */
-#ifdef __APPLE__
-#  error not on macos
+#ifndef __APPLE__
+# error not on macos
 #endif
 EOF
 
