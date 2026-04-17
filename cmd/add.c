@@ -3,7 +3,6 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
-#include "commands.h"
 #include <stdio.h>
 
 int cmd_add(int argc, const char **argv)

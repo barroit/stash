@@ -17,11 +17,13 @@
    "C_Cpp.default.includePath": [
       "${workspaceFolder}/include",
       "${workspaceFolder}/sqlite/build",
+      "${workspaceFolder}/openssl/include",
       "${workspaceFolder}/openssl/build/include",
    ],
    "C_Cpp.default.forcedInclude": [
-      "${workspaceFolder}/include/build.h",
-      "${workspaceFolder}/include/commands.h",
-      "${workspaceFolder}/include/config.h",
+      "${workspaceFolder}/include/gen/build.h",
+      "${workspaceFolder}/include/gen/commands.h",
+      "${workspaceFolder}/include/gen/config.h",
+      "${workspaceFolder}/include/gen/features.h",
    ],
 }

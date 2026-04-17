@@ -15,10 +15,13 @@ host_info_dump := $(addprefix $(host_info_dir)/,$(host_info_item))
 
 bootstrap: $(repo_info_dump) $(host_info_dump) $(tool_info_dump)
 
-include/build.h: $(repo_info_dump) $(host_info_dump)
+include/gen/build.h: $(repo_info_dump) $(host_info_dump)
+	mkdir -p $(@D)
 	printf '%s\n' $^ | ./scripts/gen-build_h.sh -e s,[^/]\\+/repo,repo, >$@
 
-include/features.h: $(tool_info_dir)/cc_features $(tool_info_dir)/ld_features
+include/gen/features.h: $(tool_info_dir)/cc_features \
+			$(tool_info_dir)/ld_features
+	mkdir -p $(@D)
 	cat $^ | ./scripts/gen-features_h.sh >$@
 
 $(repo_info_dir)/name:

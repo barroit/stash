@@ -93,17 +93,21 @@ sqlite/build/sqlite3.c openssl/build/libcrypto.a openssl/build/libcrypto.lib:
 
 $(objtree)/main.o $(cmd-obj): $(objtree)/commands.o
 
-$(objtree)/%.o: %.c include/build.h include/config.h include/features.h
+$(cmd-obj) $(objtree)/commands.o: include/gen/commands.h
+
+$(objtree)/%.o: %.c include/gen/build.h \
+		include/gen/config.h include/gen/features.h
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(addprefix -include ,$(filter include/%,$^)) \
+	$(CC) $(CFLAGS) $(addprefix -include ,$(filter include/gen/%,$^)) \
 	      -c $< -o $@
 
 -include $(obj-y:.o=.d)
 
-commands.c: include/commands.h build/commands
+commands.c: build/commands
 	printf '%s\n' $(notdir $(cmd-src)) | ./scripts/gen-commands_c.sh >$@
 
-include/commands.h: build/commands
+include/gen/commands.h: build/commands
+	mkdir -p $(@D)
 	printf '%s\n' $(notdir $(cmd-src)) | ./scripts/gen-commands_h.sh >$@
 
 build/commands: .force
@@ -117,10 +121,11 @@ build/commands: .force
 
 distclean: clean
 	rm -rf build
+	rmdir include/gen
 
 clean:
 	test -d $(objtree) && \
 	find $(objtree) \( -name '*.o' -o -name '*.d' \) ! -name sqlite3.o \
 			-exec rm {} + || true
-	rm -f commands.c include/build.h include/config.h include/commands.h \
+	rm -f commands.c include/gen/*.h \
 	      $(objtree)/commands $(objtree)/$(name) $(objtree)/$(name)-*

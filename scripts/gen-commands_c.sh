@@ -8,8 +8,6 @@ cat <<EOF
 
 #include <stddef.h>
 
-#include "commands.h"
-
 struct command commands[] = {
 $(sed 's/\(.*\)\.c/\t{ .name = "\1", .routine = cmd_\1 },/')
 	{ .name = NULL, .routine = NULL },

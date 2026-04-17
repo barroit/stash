@@ -5,10 +5,7 @@
 /scripts/__pycache__
 
 /cmd/main_*.c
-/include/build.h
-/include/commands.h
-/include/config.h
-/include/features.h
+/include/gen/*
 /commands.c
 
 /jom
