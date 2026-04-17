@@ -93,7 +93,7 @@ sqlite/build/sqlite3.c openssl/build/libcrypto.a openssl/build/libcrypto.lib:
 
 $(objtree)/main.o $(cmd-obj): $(objtree)/commands.o
 
-$(objtree)/%.o: %.c include/build.h include/config.h
+$(objtree)/%.o: %.c include/build.h include/config.h include/features.h
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(addprefix -include ,$(filter include/%,$^)) \
 	      -c $< -o $@

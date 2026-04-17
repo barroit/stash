@@ -7,6 +7,7 @@
    "search.exclude": {
       "**/openssl": true,
       "**/sqlite": true,
+      "**/kconfiglib": true,
    },
    "git.ignoredRepositories": [
       "kconfiglib",

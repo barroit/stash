@@ -18,6 +18,9 @@ bootstrap: $(repo_info_dump) $(host_info_dump) $(tool_info_dump)
 include/build.h: $(repo_info_dump) $(host_info_dump)
 	printf '%s\n' $^ | ./scripts/gen-build_h.sh -e s,[^/]\\+/repo,repo, >$@
 
+include/features.h: $(tool_info_dir)/cc_features $(tool_info_dir)/ld_features
+	cat $^ | ./scripts/gen-features_h.sh >$@
+
 $(repo_info_dir)/name:
 	mkdir -p $(@D)
 	printf '%s\n' $(name) >$@
