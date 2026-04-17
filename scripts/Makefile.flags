@@ -66,10 +66,10 @@ CFLAGS += -Wall \
 	  -Wno-switch \
 	  -Wshadow
 
-CFLAGS += -Iinclude \
-	  -Isqlite/build \
-	  -Iopenssl/include \
-	  -Iopenssl/build/include
+CFLAGS += -iquote include \
+	  -iquote sqlite/build \
+	  -iquote openssl/include \
+	  -iquote openssl/build/include
 
 CFLAGS += -D_GNU_SOURCE
 
