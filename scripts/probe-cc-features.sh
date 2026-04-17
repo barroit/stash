@@ -14,11 +14,11 @@ probe_feature()
 
 	cat >.tmp-$$.$name
 
-	# Compile and assemble for flag-only tests.
+	# Compile and assemble for flag tests only.
 	test -s .tmp-$$.$name && mode=-S || mode=-c
 
-	$cc $flags -Werror $mode -x c -o /dev/null - 2>/dev/null && \
-	printf '%s=y\n' $name || true
+	$cc $flags -Werror $mode -x c -o /dev/null .tmp-$$.$name \
+	    2>/dev/null && printf '%s=y\n' $name || true
 }
 
 probe_feature <<'EOF' &
