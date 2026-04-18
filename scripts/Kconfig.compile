@@ -64,6 +64,15 @@ config DEBUG_INFO_COMPRESS_ZSTD
 
 endchoice # Compress debug information
 
+config WARN_LARGE_ALLOC
+	bool "Warn on large allocations"
+	default ENABLE_DEBUG
+
+config LARGE_ALLOC
+	hex "Large allocation warning threshold"
+	default 0x80000
+	depends on WARN_LARGE_ALLOC
+
 config IGNORE_ANNOT_LEAKS
 	bool "Suppress leak reports for annotated objects"
 

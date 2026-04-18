@@ -44,7 +44,16 @@ endif
 include scripts/Makefile.flags
 
 lib-src := sqlite/build/sqlite3.c \
-	   lib/parse_argv.c
+	   lib/err.c \
+	   lib/log.c \
+	   lib/parse_argv.c \
+	   lib/rio.c \
+	   lib/strbuf.c \
+	   lib/xalloc.c
+
+ifeq ($(CC_HAS_REALLOCARRAY),)
+  lib-src += lib/reallocarray.c
+endif
 
 cmd-src := cmd/add.c \
 	   cmd/help.c \
