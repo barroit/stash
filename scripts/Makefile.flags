@@ -44,7 +44,7 @@ ifneq ($(CONFIG_ENABLE_SANITIZER),)
   LDFLAGS += -fsanitize=address,undefined
 endif
 
-ifneq ($(CC_HAS_TOPLEVEL_REORDER),)
+ifneq ($(and $(CONFIG_ENABLE_TEST),$(CC_HAS_TOPLEVEL_REORDER)),)
   CFLAGS += -fno-toplevel-reorder
 endif
 
