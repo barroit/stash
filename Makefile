@@ -66,6 +66,11 @@ obj-y := $(main-obj) $(cmd-obj) $(lib-obj)
 
 cmd-y := $(addprefix $(objtree)/stash-,$(notdir $(basename $(cmd-obj))))
 
+ifneq ($(CONFIG_ENABLE_TEST),)
+  include scripts/Makefile.lib_test
+  include scripts/Makefile.cmd_test
+endif
+
 .PNONY: commands
 
 commands: $(objtree)/$(name) $(cmd-y)

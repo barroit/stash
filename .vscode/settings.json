@@ -25,5 +25,6 @@
       "${workspaceFolder}/include/gen/commands.h",
       "${workspaceFolder}/include/gen/config.h",
       "${workspaceFolder}/include/gen/features.h",
+      "${workspaceFolder}/include/gen/unitest.h",
    ],
 }

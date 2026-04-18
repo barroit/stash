@@ -72,9 +72,13 @@ config ENABLE_SANITIZER
 	select IGNORE_ANNOT_LEAKS
 	default ENABLE_DEBUG
 
+config ENABLE_TEST
+	bool "Add test targets"
+	default ENABLE_DEBUG
+
 menu "List options"
 
-config LIST_CHECK_CHANGE
+config VALIDATE_LIST_MUTATION
 	bool "Validate list modifications"
 	default ENABLE_DEBUG
 

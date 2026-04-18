@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+unitest-src := t/unit/err.c \
+	       t/unit/strbuf.c
+
+unitest-obj := $(addprefix $(objtree)/,$(unitest-src:.c=.o) t/unit/main.o)
+
+unitest-y := $(addprefix $(objtree)/unitest/,$(notdir $(unitest-src:.c=)))
+
+$(unitest-obj): include/gen/unitest.h
+
+include/gen/unitest.h: t/unit/unitest.h
+	mkdir -p $(@D)
+	cp $< $@
+
+$(unitest-y):
+
+$(objtree)/unitest/%: $(objtree)/t/unit/main.o $(objtree)/t/unit/%.o \
+		      $(lib-obj) $(link-y)
+	mkdir -p $(@D)
+	$(CC) -fuse-ld=$(LD) $(LDFLAGS) $^ -o $@
