@@ -61,11 +61,13 @@
 #define __maybe_unused __attr((__unused__))
 
 /*
- * linker & layout
+ * linker & symbol control
  */
 
 #define __section(x) __attr((__section__(x)))
 
 #define __constructor __attr((__constructor__))
+
+#define __weak __attr((weak))
 
 #endif /* ATTR_H */

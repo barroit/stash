@@ -3,14 +3,10 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "strbuf.h"
+#include "uniassert.h"
+#include "unitest.h"
 
 unitest_begin();
-
-unitest_routine(err)
-{
-	puts("11");
-}
 
 unitest_end();

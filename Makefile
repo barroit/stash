@@ -76,8 +76,8 @@ obj-y := $(main-obj) $(cmd-obj) $(lib-obj)
 cmd-y := $(addprefix $(objtree)/stash-,$(notdir $(basename $(cmd-obj))))
 
 ifneq ($(CONFIG_ENABLE_TEST),)
-  include scripts/Makefile.lib_test
-  include scripts/Makefile.cmd_test
+  include scripts/Makefile.unitest
+  include scripts/Makefile.cmdtest
 endif
 
 .PNONY: commands
@@ -142,4 +142,5 @@ clean:
 	find $(objtree) \( -name '*.o' -o -name '*.d' \) ! -name sqlite3.o \
 			-exec rm {} + || true
 	rm -f commands.c include/gen/*.h \
-	      $(objtree)/commands $(objtree)/$(name) $(objtree)/$(name)-*
+	      $(objtree)/commands $(objtree)/$(name) $(objtree)/$(name)-* \
+	      $(objtree)/unitest/*

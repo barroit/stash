@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+CFLAGS += -iquote t/include
+
+unitest-lib-src := t/lib/main.c \
+		   t/lib/uniassert.c
+
+unitest-test-src := t/unit/log.c \
+		    t/unit/strbuf_alloc.c \
+		    t/unit/strbuf_prealloc.c
+
+unitest-lib-obj := $(addprefix $(objtree)/,$(unitest-lib-src:.c=.o))
+unitest-test-obj := $(addprefix $(objtree)/,$(unitest-test-src:.c=.o))
+
+unitest-obj := $(unitest-lib-obj) $(unitest-test-obj)
+unitest-y := $(addprefix $(objtree)/unitest/, \
+			 $(notdir $(unitest-test-obj:.o=.run)))
+
+.PHONY: t/unit/
+
+t/unit/: $(unitest-y)
+
+$(unitest-y):
+
+$(objtree)/unitest/%: $(objtree)/t/unit/%.o \
+		      $(unitest-lib-obj) $(lib-obj) $(link-y)
+	mkdir -p $(@D)
+	$(CC) -fuse-ld=$(LD) $(LDFLAGS) $^ -o $@
+
+-include $(unitest-obj:.o=.d)
+
+include scripts/Makefile.unitest_dep

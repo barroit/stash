@@ -16,6 +16,7 @@
    ],
    "C_Cpp.default.includePath": [
       "${workspaceFolder}/include",
+      "${workspaceFolder}/t/include",
       "${workspaceFolder}/sqlite/build",
       "${workspaceFolder}/openssl/include",
       "${workspaceFolder}/openssl/build/include",

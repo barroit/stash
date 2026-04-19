@@ -19,8 +19,6 @@ extern unitest_routine_t __unitest_end[];
 extern unitest_routine_t __unitest_setup;
 extern unitest_routine_t __unitest_teardown;
 
-extern unsigned int __unitest_failures;
-
 #define unitest_routine(name) __unitest_routine(__test_ ## name)
 
 #define __unitest_routine(name) \
@@ -33,7 +31,6 @@ extern unsigned int __unitest_failures;
 	static unitest_ld_section void (*name ## _ptr)(void)
 
 #define unitest_begin(...) \
-	unsigned int __unitest_failures = 0; \
 	unitest_routine_t unitest_ld_section __unitest_begin[1] = { 0 }; \
 	CALL(__unitest_begin_, ##__VA_ARGS__)
 

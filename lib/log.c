@@ -30,7 +30,7 @@ static size_t format_line(char *buf, size_t cap, const char *prefix,
 }
 
 void vlogf_fd(int fd, const char *prefix,
-	    const char *hint, const char *fmt, va_list ap)
+	      const char *hint, const char *fmt, va_list ap)
 {
 	char buf[SZ_2K];
 	size_t len = format_line(buf, sizeof(buf), prefix, hint, fmt, ap);
@@ -49,7 +49,7 @@ void logf_fd(int fd, const char *prefix, const char *hint, const char *fmt, ...)
 }
 
 void vlogf_stream(FILE *stream, const char *prefix,
-		const char *hint, const char *fmt, va_list ap)
+		  const char *hint, const char *fmt, va_list ap)
 {
 	char buf[SZ_2K];
 	size_t len = format_line(buf, sizeof(buf), prefix, hint, fmt, ap);

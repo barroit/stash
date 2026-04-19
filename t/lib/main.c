@@ -1,0 +1,97 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * Copyright 2026 Jiamu Sun <39@barroit.sh>
+ */
+
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+
+#include "foreach.h"
+#include "size.h"
+#include "unitest.h"
+
+static int require_deps(const char *program, const char *dump)
+{
+	char buf[SZ_4K];
+	char cp[SZ_4K];
+	size_t cap = sizeof(buf);
+	FILE *stream = fopen(dump, "r");
+	unsigned int missing = 0;
+	char *test;
+
+	while ((test = fgets(buf, cap, stream))) {
+		char *lf = strchr(buf, '\n');
+		char *sep = strrchr(buf, '/');
+		struct stat st;
+
+		assert(lf);
+		*lf = 0;
+
+		if (!*buf || !stat(buf, &st))
+			continue;
+
+		switch (missing) {
+		case 0:
+			printf("0 # skip %s as", program);
+			break;
+		case 1:
+			printf(" %s", cp);
+			break;
+		default:
+			printf(", %s", cp);
+		}
+
+		strcpy(cp, &sep[1]);
+		missing++;
+	}
+
+	switch (missing) {
+	case 0:
+		return 0;
+	case 1:
+		break;
+	case 2:
+		fputs(" and", stdout);
+		break;
+	default:
+		fputs(", and", stdout);
+	}
+
+	printf(" %s", cp);
+	printf(" %s missing\n", missing == 1 ? "is" : "are");
+	return 1;
+}
+
+int main(int argc, const char **argv)
+{
+	unsigned int next;
+	unsigned int stop = __unitest_end - __unitest_begin - 1;
+	unitest_routine_t *tests = (typeof(tests))__unitest_begin + 1;
+
+	assert(argc == 2);
+
+	setvbuf(stdout, NULL, _IOLBF, 0);
+	setvbuf(stderr, NULL, _IOLBF, 0);
+
+	puts("TAP version 14");
+	fputs("1..", stdout);
+
+	if (require_deps(argv[0], argv[1]))
+		exit(1);
+
+	printf("%u # %s\n", stop, argv[0]);
+
+	// if (__unitest_teardown)
+	// 	atexit_push(__unitest_teardown);
+
+	// if (__unitest_setup)
+	// 	__unitest_setup();
+
+	foreach(next, stop)
+		tests[next]();
+
+	exit(0);
+}
