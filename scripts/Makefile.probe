@@ -84,7 +84,8 @@ $(tool_info_dir)/dump:
 	./scripts/probe-tools.sh >.tmp-$$$$ && \
 	mv .tmp-$$$$ $@
 
-$(tool_info_dir)/%_features: $(tool_info_dir)/%
+$(tool_info_dir)/%_features: $(tool_info_dir)/% scripts/probe-%-features.sh
 	trap 'rm -f .tmp-$$$$' EXIT && \
-	./scripts/probe-$*-features.sh $$(cat $^) | sort >.tmp-$$$$ && \
+	./scripts/probe-$*-features.sh $$(cat $(filter-out %.sh,$^)) | \
+	sort >.tmp-$$$$ && \
 	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || mv .tmp-$$$$ $@

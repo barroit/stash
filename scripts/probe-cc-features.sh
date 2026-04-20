@@ -82,4 +82,13 @@ __unix__
 #endif
 EOF
 
+probe_feature <<'EOF' &
+CC_HAS_VARIABLE_NO_SANITIZE
+-fsanitize=address,undefined
+
+extern int *var;
+
+__attribute__((no_sanitize("address"))) int *var = (typeof(var))39;
+EOF
+
 wait

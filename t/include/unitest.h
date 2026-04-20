@@ -62,12 +62,19 @@ extern unitest_routine_t __unitest_teardown;
 #define __unitest_end_1(name) \
 	unitest_routine_def(name, unitest_routine_t __unitest_teardown)
 
-#define unitest_ld_section __section(unitest_ld_section_name) __no_asan __used
+#define unitest_ld_section __section(unitest_ld_section_name) \
+			   __unitest_no_asan __used
 
 #ifdef __APPLE__
 # define unitest_ld_section_name "__DATA,__miku_test"
 #else
-# define unitest_ld_section_name 
+# define unitest_ld_section_name ".miku_test"
+#endif
+
+#ifdef CC_HAS_VARIABLE_NO_SANITIZE
+# define __unitest_no_asan __no_asan
+#else
+# define __unitest_no_asan
 #endif
 
 #endif /* UNITEST_H */
