@@ -49,7 +49,7 @@ extern unitest_routine_t __unitest_teardown;
 #define __unitest_end_1(name) \
 	unitest_routine_def(name, unitest_routine_t __unitest_teardown)
 
-#define unitest_ld_section __section(".miku_test") __used
+#define unitest_ld_section __section(unitest_ld_section_name) __no_asan __used
 
 #ifdef __APPLE__
 # define unitest_ld_section_name "__DATA,__miku_test"
