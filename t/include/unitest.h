@@ -11,7 +11,18 @@
 #include "attr.h"
 #include "cpp.h"
 
-typedef void (*unitest_routine_t)(void);
+enum unitest_directive {
+	UNITEST_TODO = 1,
+	UNITEST_SKIP,
+};
+
+struct unitest {
+	const char *detail;
+	enum unitest_directive direct;
+	const char *direct_reason;
+};
+
+typedef int (*unitest_routine_t)(struct unitest *);
 
 extern unitest_routine_t __unitest_begin[];
 extern unitest_routine_t __unitest_end[];
@@ -19,16 +30,18 @@ extern unitest_routine_t __unitest_end[];
 extern unitest_routine_t __unitest_setup;
 extern unitest_routine_t __unitest_teardown;
 
-#define unitest_routine(name) __unitest_routine(__test_ ## name)
+#define unitest_routine(name) unitest_routine_def(__test_ ## name)
 
-#define __unitest_routine(name) \
-	unitest_routine_def(name, unitest_routine_lv(name))
+#define unitest_routine_def(name) \
+	unitest_routine_declare(name); \
+	unitest_routine_lvalue(name) = &name; \
+	unitest_routine_declare(name)
 
-#define unitest_routine_def(name, lv) \
-	static void name(void); lv = &name; static void name(void)
+#define unitest_routine_lvalue(name) \
+	static unitest_ld_section int (*name ## _ptr)(struct unitest *)
 
-#define unitest_routine_lv(name) \
-	static unitest_ld_section void (*name ## _ptr)(void)
+#define unitest_routine_declare(name) \
+	static int name(struct unitest *unitest)
 
 #define unitest_begin(...) \
 	unitest_routine_t unitest_ld_section __unitest_begin[1] = { 0 }; \

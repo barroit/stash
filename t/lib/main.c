@@ -67,7 +67,7 @@ static int require_deps(const char *program, const char *dump)
 
 int main(int argc, const char **argv)
 {
-	unsigned int next;
+	unsigned int idx;
 	unsigned int stop = __unitest_end - __unitest_begin - 1;
 	unitest_routine_t *tests = (typeof(tests))__unitest_begin + 1;
 
@@ -82,6 +82,11 @@ int main(int argc, const char **argv)
 	if (require_deps(argv[0], argv[1]))
 		exit(1);
 
+	if (!stop) {
+		printf("%u # skip %s as no test found\n", stop, argv[0]);
+		exit(0);
+	}
+
 	printf("%u # %s\n", stop, argv[0]);
 
 	// if (__unitest_teardown)
@@ -90,8 +95,35 @@ int main(int argc, const char **argv)
 	// if (__unitest_setup)
 	// 	__unitest_setup();
 
-	foreach(next, stop)
-		tests[next]();
+	/*
+	 * FIXME: support MT
+	 */
+	foreach(idx, stop) {
+		struct unitest unitest;
+		int err = tests[idx](&unitest);
+		const char *not = err ? "not " : "";
+
+		printf("%sok %u", not, idx + 1);
+
+		if (unitest.detail)
+			printf(" - %s", unitest.detail);
+
+		if (unitest.direct) {
+			fputs(" # %s", stdout);
+
+			switch (unitest.direct) {
+			case UNITEST_TODO:
+				fputs("TODO", stdout);
+			case UNITEST_SKIP:
+				fputs("SKIP", stdout);
+			}
+
+			if (unitest.direct_reason)
+				printf(" %s", unitest.direct_reason);
+		}
+
+		putchar('\n');
+	}
 
 	exit(0);
 }

@@ -9,4 +9,9 @@
 
 unitest_begin();
 
+unitest_routine(sb_append_str_at)
+{
+	return 0;
+}
+
 unitest_end();

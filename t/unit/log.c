@@ -6,9 +6,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "log.h"
 #include "uniassert.h"
 #include "unitest.h"
 
 unitest_begin();
+
+unitest_routine(logf_fd)
+{
+	return 1;
+}
 
 unitest_end();
