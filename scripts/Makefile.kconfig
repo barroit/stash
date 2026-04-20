@@ -3,7 +3,7 @@
 kconfig_dir := $(objtree)/config
 kconfigenv := KCONFIG_FUNCTIONS=kconfig PYTHONPATH=$(CURDIR)/scripts \
 	      KCONFIG_CONFIG=$(kconfig_dir)/dump OBJTREE=$(objtree)
-kconfiglib := $(kconfigenv) kconfiglib
+kconfiglib := $(kconfigenv) ./kconfiglib
 
 .PHONY: menuconfig
 

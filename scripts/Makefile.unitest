@@ -1,5 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+ifneq ($(filter t/unit/ $(objtree)/unitest/%.run,$(MAKECMDGOALS)),)
+  MAKEFLAGS += -s
+endif
+
 CFLAGS += -iquote t/include
 
 unitest-lib-src := t/lib/main.c \

@@ -11,7 +11,7 @@ unitest_begin();
 
 unitest_routine(sb_append_str_at)
 {
-	return 0;
+	return 1;
 }
 
 unitest_end();

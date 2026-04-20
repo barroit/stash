@@ -11,3 +11,7 @@
 	path = sqlite
 	url = https://github.com/sqlite/sqlite.git
 	ignore = untracked
+
+[submodule "tapview"]
+	path = tapview
+	url = https://gitlab.com/esr/tapview.git

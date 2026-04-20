@@ -7,4 +7,8 @@ $(objtree)/unitest/log.run: $(objtree)/unitest/strbuf_prealloc.run
 $(objtree)/unitest/%.run: $(objtree)/unitest/%
 	printf '%s\n' $(patsubst %.run,%.pass,$(filter %.run,$^)) >$<.deps
 	rm -f $<.pass
-	$< $<.deps && touch $<.pass || true
+	printf '\n== %s\n' $<
+	time -p $< $<.deps 2>$<.err | ./tapview/tapview && touch $<.pass || true
+	printf '\n'
+	cat $<.err
+
