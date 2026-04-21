@@ -7,11 +7,13 @@
 #ifndef CALC_H
 #define CALC_H
 
+#include <inttypes.h>
 #include <limits.h>
 #include <stdint.h>
 
 #include "attr.h"
 #include "compiler.h"
+#include "err.h"
 
 #define sizeof_array(x) (__sizeof_array(x) + _array(x))
 #define __sizeof_array(x) (sizeof(x) / sizeof((x)[0]))
@@ -34,24 +36,22 @@
 #define mult_is_overflow(a, b) ((a) && (b) > (maxof(a) / (a)))
 #define add_is_overflow(a, b) ((b) > (maxof(a) - (a)))
 
-extern void __die_overflow(const char *file, int line,
-			   const char *func, uintmax_t a, uintmax_t b,
-			   char op, unsigned int size);
-
-#define mult_or_die(a, b)					\
-({								\
-	if (unlikely(mult_is_overflow(a, b)))			\
-		__die_overflow(__FILE__, __LINE__, __func__, 	\
-			       a, b, '*', sizeof(a));		\
-	(a) * (b);						\
+#define mult_or_die(a, b)			\
+({						\
+	if (unlikely(mult_is_overflow(a, b)))	\
+		bug("%" PRIuMAX " * %" PRIuMAX	\
+		    " overflows in %zu-byte",	\
+		    (a), (b), sizeof(a));	\
+	(a) * (b);				\
 })
 
-#define add_or_add(a, b)					\
-({								\
-	if (unlikely(add_is_overflow(a, b)))			\
-		__die_overflow(__FILE__, __LINE__, __func__,	\
-			       a, b, '+', sizeof(a));		\
-	(a) + (b);						\
+#define add_or_add(a, b)			\
+({						\
+	if (unlikely(add_is_overflow(a, b)))	\
+		bug("%" PRIuMAX " + %" PRIuMAX	\
+		    " overflows in %zu-byte",	\
+		    (a), (b), sizeof(a));	\
+	(a) + (b);				\
 })
 
 #define next_buf_size(x) align_down((((x) + 8) * 3) >> 1, 8)

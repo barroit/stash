@@ -33,4 +33,20 @@
 #define __NOOP_6(_1, _2, _3, _4, _5, _6) \
 	do { if ((_1) && (_2) && (_3) && (_4) && (_5) && (_6)); } while (0)
 
+#undef __CONCAT
+#define CONCAT(a, b)   __CONCAT(a, b)
+#define __CONCAT(a, b) a ## b
+
+#define IS_ENABLED(x)     __IS_ENABLED(CONCAT(__kconfig_enabled_, x), 0)
+#define __IS_ENABLED(...) ___IS_ENABLED(__VA_ARGS__)
+#define ___IS_ENABLED(_, x, ...) x
+#define __kconfig_enabled_1 , 1
+
+#define POISON_ADDR_1 (void *)0x3901
+#define POISON_ADDR_2 (void *)0x3902
+#define POISON_ADDR_3 (void *)0x3903
+#define POISON_ADDR_4 (void *)0x3904
+#define POISON_ADDR_5 (void *)0x3905
+#define POISON_ADDR_6 (void *)0x3906
+
 #endif /* CPP_H */

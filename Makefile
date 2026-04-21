@@ -44,7 +44,9 @@ endif
 include scripts/Makefile.flags
 
 lib-src := sqlite/build/sqlite3.c \
+	   lib/atexit.c \
 	   lib/err.c \
+	   lib/list.c \
 	   lib/log.c \
 	   lib/parse_argv.c \
 	   lib/rio.c \

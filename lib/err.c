@@ -45,14 +45,13 @@ void __die(const char *hint, const char *fmt, ...)
 	exit(128);
 }
 
-void __die_overflow(const char *file, int line, const char *func,
-		    uintmax_t a, uintmax_t b, char op, unsigned int size);
-
-void __die_overflow(const char *file, int line, const char *func,
-		    uintmax_t a, uintmax_t b, char op, unsigned int size)
+void __bug(const char *fmt, ...)
 {
-	logf_fd(STDERR_FILENO, NULL, NULL,
-		"%s:%d,%s(): %" PRIuMAX " %c %" PRIuMAX " overflows in %u-byte",
-		file, line, func, a, op, b, size);
+	va_list ap;
+
+	va_start(ap, fmt);
+	vlogf_fd(STDERR_FILENO, NULL, NULL, fmt, ap);
+
 	abort();
 }
+

@@ -22,6 +22,9 @@ extern char *strerror(int errnum);
 #define die(fmt, ...) __die(NULL, fmt, ##__VA_ARGS__)
 #define die_errno(fmt, ...) __die(strerror(errno), fmt, ##__VA_ARGS__)
 
+#define bug(fmt, ...) \
+	__bug("%s:%d,%s(): " fmt, __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+
 int __warn(const char *hint, const char *fmt, ...)  __printf(2, 3);
 
 /*
@@ -30,5 +33,7 @@ int __warn(const char *hint, const char *fmt, ...)  __printf(2, 3);
 int __error39(const char *hint, const char *fmt, ...) __printf(2, 3);
 
 void __die(const char *hint, const char *fmt, ...) __printf(2, 3) __noreturn;
+
+void __bug(const char *fmt, ...) __printf(1, 2) __noreturn;
 
 #endif /* ERR_H */

@@ -39,4 +39,13 @@
 # define __align_down(m, n) ((m) & ~(uintmax_t)(n - 1))
 #endif
 
+#define container_of(x, type, memb)				\
+({								\
+	BUILD_BUG_ON(!type_is_same(*(x), void) &&		\
+		     !type_is_same(*(x), ((type *)0)->memb));	\
+	(type *)((void *)(x) - __builtin_offsetof(type, memb));	\
+})
+
+#define unreachable __builtin_unreachable
+
 #endif /* COMPILER_H */
