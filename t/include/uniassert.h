@@ -9,14 +9,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#define uniassert_ok_or_ret(ok)						\
-do {									\
-	if (!(ok)) {							\
-		fprintf(stderr,						\
-			"uniassert:%s:%d:%s: assert %s failed\n",	\
-			__FILE__, __LINE__, __func__, #ok);		\
-		return 1;						\
-	}								\
+#define uniassert_ok_or_ret(ok)					\
+do {								\
+	if (!(ok)) {						\
+		fprintf(stderr,					\
+			"%s:%d,%s(): assert %s failed\n",	\
+			__FILE__, __LINE__, __func__, #ok);	\
+		return 1;					\
+	}							\
 } while (0)
 
 #define uniassert_strequal(a, b) uniassert_ok_or_ret(!strcmp((a), (b)))
