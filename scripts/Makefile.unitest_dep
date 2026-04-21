@@ -8,6 +8,7 @@ $(objtree)/unitest/%.run: $(objtree)/unitest/%
 	printf '%s\n' $(patsubst %.run,%.pass,$(filter %.run,$^)) >$<.deps
 	rm -f $<.pass
 	printf '\n== %s\n' $<
-	time -p $< $<.deps 2>$<.err | ./tapview/tapview && touch $<.pass || true
+	env time -p $< $<.deps 2>$<.err | ./tapview/tapview && \
+	touch $<.pass || true
 	printf '\n'
 	cat $<.err
