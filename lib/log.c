@@ -14,15 +14,15 @@ static size_t format_line(char *buf, size_t cap, const char *prefix,
 	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, cap - 1);
 
 	if (prefix) {
-		sb_append_str(&sb, prefix);
-		sb_append_ch(&sb, ' ');
+		sb_write_str(&sb, prefix);
+		sb_write_ch(&sb, ' ');
 	}
 
-	sb_vappendf(&sb, fmt, ap);
+	sb_vwritef(&sb, fmt, ap);
 
 	if (hint) {
-		sb_append_str(&sb, "; ");
-		sb_append_str(&sb, hint);
+		sb_write_str(&sb, "; ");
+		sb_write_str(&sb, hint);
 	}
 
 	sb.buf[sb.len++] = '\n';

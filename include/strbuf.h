@@ -23,30 +23,29 @@ struct strbuf {
 };
 
 #define STRBUF_INIT { .buf = NULL, .len = 0, .cap = 0, .mode = STRBUF_ALLOC }
-#define STRBUF_INIT_PREALLOC(buf, size) \
-	{ .buf = buf, .len = 0, .cap = size, .mode = STRBUF_PREALLOC }
+#define STRBUF_INIT_PREALLOC(__buf, __cap) \
+	{ .buf = __buf, .len = 0, .cap = __cap, .mode = STRBUF_PREALLOC }
 
 void sb_destroy(struct strbuf *sb);
 
 void sb_reinit(struct strbuf *sb, uint32_t mode);
 
-#define sb_append_ch(sb, c) sb_append_ch_at(sb, (sb)->len, c)
+#define sb_write_ch(sb, c) sb_write_ch_at(sb, (sb)->len, c)
 
-#define sb_append_str(sb, s) sb_append_str_at(sb, (sb)->len, s)
+#define sb_write_str(sb, s) sb_write_str_at(sb, (sb)->len, s)
 
-#define sb_vappendf(sb, fmt, ap) sb_vappendf_at(sb, (sb)->len, fmt, ap)
+#define sb_vwritef(sb, fmt, ap) sb_vwritef_at(sb, (sb)->len, fmt, ap)
 
-#define sb_appendf(sb, fmt, ...) \
-	sb_vappendf_at(sb, (sb)->len, fmt, ##__VA_ARGS__)
+#define sb_writef(sb, fmt, ...) sb_vwritef_at(sb, (sb)->len, fmt, ##__VA_ARGS__)
 
-size_t sb_append_ch_at(struct strbuf *sb, size_t pos, char c);
+size_t sb_write_ch_at(struct strbuf *sb, size_t pos, char c);
 
-size_t sb_append_str_at(struct strbuf *sb, size_t pos, const char *s);
+size_t sb_write_str_at(struct strbuf *sb, size_t pos, const char *s);
 
-size_t sb_vappendf_at(struct strbuf *sb,
-		      size_t pos, const char *fmt, va_list ap);
+size_t sb_vwritef_at(struct strbuf *sb,
+		     size_t pos, const char *fmt, va_list ap);
 
-size_t sb_appendf_at(struct strbuf *sb,
-		     size_t pos, const char *fmt, ...) __printf(3, 4);
+size_t sb_writef_at(struct strbuf *sb,
+		    size_t pos, const char *fmt, ...) __printf(3, 4);
 
 #endif /* STRBUF_H */

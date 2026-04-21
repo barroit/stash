@@ -25,7 +25,7 @@ void sb_reinit(struct strbuf *sb, uint32_t mode)
 	sb->mode = mode;
 }
 
-size_t sb_append_ch_at(struct strbuf *sb, size_t pos, char c)
+size_t sb_write_ch_at(struct strbuf *sb, size_t pos, char c)
 {
 	size_t new = pos + 1;
 
@@ -45,7 +45,7 @@ size_t sb_append_ch_at(struct strbuf *sb, size_t pos, char c)
 	return 1;
 }
 
-size_t sb_append_str_at(struct strbuf *sb, size_t pos, const char *s)
+size_t sb_write_str_at(struct strbuf *sb, size_t pos, const char *s)
 {
 	size_t len = strlen(s);
 	size_t new = pos + len;
@@ -65,8 +65,7 @@ size_t sb_append_str_at(struct strbuf *sb, size_t pos, const char *s)
 	return len;
 }
 
-size_t sb_vappendf_at(struct strbuf *sb,
-		      size_t pos, const char *fmt, va_list ap)
+size_t sb_vwritef_at(struct strbuf *sb, size_t pos, const char *fmt, va_list ap)
 {
 	va_list cp;
 	int nr;
@@ -94,13 +93,13 @@ size_t sb_vappendf_at(struct strbuf *sb,
 	return nr;
 }
 
-size_t sb_appendf_at(struct strbuf *sb, size_t pos, const char *fmt, ...)
+size_t sb_writef_at(struct strbuf *sb, size_t pos, const char *fmt, ...)
 {
 	va_list ap;
 	size_t nr;
 
 	va_start(ap, fmt);
-	nr = sb_vappendf_at(sb, pos, fmt, ap);
+	nr = sb_vwritef_at(sb, pos, fmt, ap);
 
 	va_end(ap);
 	return nr;
