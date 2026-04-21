@@ -11,4 +11,3 @@ $(objtree)/unitest/%.run: $(objtree)/unitest/%
 	time -p $< $<.deps 2>$<.err | ./tapview/tapview && touch $<.pass || true
 	printf '\n'
 	cat $<.err
-

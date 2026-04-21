@@ -8,6 +8,7 @@
       "**/openssl": true,
       "**/sqlite": true,
       "**/kconfiglib": true,
+      "**/tapview": true,
    },
    "git.ignoredRepositories": [
       "kconfiglib",
