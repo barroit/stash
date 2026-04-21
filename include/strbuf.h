@@ -36,7 +36,7 @@ void sb_reinit(struct strbuf *sb, uint32_t mode);
 
 #define sb_vwritef(sb, fmt, ap) sb_vwritef_at(sb, (sb)->len, fmt, ap)
 
-#define sb_writef(sb, fmt, ...) sb_vwritef_at(sb, (sb)->len, fmt, ##__VA_ARGS__)
+#define sb_writef(sb, fmt, ...) sb_writef_at(sb, (sb)->len, fmt, ##__VA_ARGS__)
 
 size_t sb_write_ch_at(struct strbuf *sb, size_t pos, char c);
 
