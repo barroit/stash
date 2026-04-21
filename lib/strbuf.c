@@ -69,36 +69,28 @@ size_t sb_vappendf_at(struct strbuf *sb,
 		      size_t pos, const char *fmt, va_list ap)
 {
 	va_list cp;
-	size_t room;
 	int nr;
+	size_t new;
 
 	assert(pos <= sb->len);
 	va_copy(cp, ap);
 
-	if (!(sb->mode & STRBUF_PREALLOC))
-		XREALLOCBUF(sb->buf, sb->len + 39 * 6 + 1, sb->cap);
-
-	room = sb->cap - (pos + 1);
-	nr = vsnprintf(&sb->buf[pos], room + 1, fmt, ap);
+	nr = vsnprintf(NULL, 0, fmt, cp);
 	assert(nr >= 0);
+	new = pos + nr;
+	va_end(cp);
 
-	if (nr <= room)
-		goto out;
-
-	if (sb->mode & STRBUF_PREALLOC) {
-		nr = room;
-		goto out;
+	if (new + 1 > sb->cap) {
+		if (sb->mode & STRBUF_PREALLOC)
+			return 0;
+		else
+			XREALLOCBUF(sb->buf, new + 1, sb->cap);
 	}
 
-	XREALLOCBUF(sb->buf, pos + nr + 1, sb->cap);
-
-	room = sb->cap - (pos + 1);
-	nr = vsnprintf(&sb->buf[pos], room + 1, fmt, cp);
+	nr = vsnprintf(&sb->buf[pos], nr + 1, fmt, ap);
 	assert(nr >= 0);
 
-out:
-	sb->len = pos + nr;
-	va_end(cp);
+	sb->len = new;
 	return nr;
 }
 
