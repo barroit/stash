@@ -9,7 +9,7 @@
 
 unitest_begin();
 
-unitest_routine(sb_append_str_at)
+unitest_routine(sb_write_str_at)
 {
 	return 1;
 }
