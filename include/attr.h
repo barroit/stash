@@ -13,9 +13,7 @@
 #undef __always_inline
 #define __always_inline inline __attribute__((__always_inline__))
 
-#ifdef __cold
-# undef __cold
-#endif
+#undef __cold
 #define __cold __attribute__((__cold__))
 
 /*
@@ -24,9 +22,7 @@
 
 #define __noreturn __attribute__((__noreturn__))
 
-#ifdef __pure
-# undef __pure
-#endif
+#undef __pure
 #define __pure __attribute__((__pure__))
 
 #define __malloc __attribute__((__malloc__))
@@ -52,9 +48,7 @@
  * usage & visibility
  */
 
-#ifdef __used
-# undef __used
-#endif
+#undef __used
 #define __used __attribute__((__used__))
 
 #define __maybe_unused __attribute__((__unused__))
@@ -67,9 +61,7 @@
 
 #define __constructor __attribute__((__constructor__))
 
-#ifdef __weak
-# undef __weak
-#endif
+#undef __weak
 #define __weak __attribute__((weak))
 
 #define __no_asan __attribute__((no_sanitize("address")))
