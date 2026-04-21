@@ -71,15 +71,13 @@ int main(int argc, const char **argv)
 	unsigned int stop = __unitest_end - __unitest_begin - 1;
 	unitest_routine_t *tests = (typeof(tests))__unitest_begin + 1;
 
-	assert(argc == 2);
-
 	setvbuf(stdout, NULL, _IOLBF, 0);
 	setvbuf(stderr, NULL, _IOLBF, 0);
 
 	puts("TAP version 14");
 	fputs("1..", stdout);
 
-	if (require_deps(argv[0], argv[1]))
+	if (argc == 2 && require_deps(argv[0], argv[1]))
 		exit(1);
 
 	if (!stop) {
