@@ -6,8 +6,7 @@ endif
 
 CFLAGS += -iquote t/include
 
-unitest-lib-src := t/lib/main.c \
-		   t/lib/uniassert.c
+unitest-lib-src := t/lib/main.c
 
 unitest-test-src := t/unit/log.c \
 		    t/unit/strbuf_alloc.c \
