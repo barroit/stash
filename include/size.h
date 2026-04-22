@@ -22,4 +22,6 @@
 #define SZ_256K 0x40000
 #define SZ_512K 0x80000
 
+#define INTEGER_DIGITS 20
+
 #endif /* SIZE_H */
