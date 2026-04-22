@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#include "atexit.h"
 #include "foreach.h"
 #include "size.h"
 #include "unitest.h"
@@ -68,8 +69,10 @@ static int require_deps(const char *program, const char *dump)
 int main(int argc, const char **argv)
 {
 	unsigned int idx;
-	unsigned int stop = __unitest_end - __unitest_begin - 1;
-	unitest_routine_t *tests = (typeof(tests))__unitest_begin + 1;
+	unsigned int stop = unitest_end - unitest_begin - 1;
+	unitest_routine_t *tests = (typeof(tests))unitest_begin + 1;
+
+	atexit_setup();
 
 	setvbuf(stdout, NULL, _IOLBF, 0);
 	setvbuf(stderr, NULL, _IOLBF, 0);
@@ -87,11 +90,11 @@ int main(int argc, const char **argv)
 
 	printf("%u # %s\n", stop, argv[0]);
 
-	// if (__unitest_teardown)
-	// 	atexit_push(__unitest_teardown);
+	if (unitest_teardown)
+		atexit_push(unitest_teardown);
 
-	// if (__unitest_setup)
-	// 	__unitest_setup();
+	if (unitest_setup)
+		unitest_setup();
 
 	/*
 	 * FIXME: support MT

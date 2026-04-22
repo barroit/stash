@@ -10,11 +10,17 @@
 #include "uniassert.h"
 #include "unitest.h"
 
-unitest_begin();
+unitest_begin(setup)
+{
+	puts("setup");
+}
 
 unitest_routine(logf_fd)
 {
-	return 1;
+	return 0;
 }
 
-unitest_end();
+unitest_end(teardown)
+{
+	puts("teardown");
+}

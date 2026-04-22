@@ -22,59 +22,56 @@ struct unitest {
 	const char *direct_reason;
 };
 
+typedef void (*unitest_hook_t)(void);
 typedef int (*unitest_routine_t)(struct unitest *);
 
-extern unitest_routine_t __unitest_begin[];
-extern unitest_routine_t __unitest_end[];
+extern unitest_routine_t unitest_begin[];
+extern unitest_routine_t unitest_end[];
 
-extern unitest_routine_t __unitest_setup;
-extern unitest_routine_t __unitest_teardown;
+extern unitest_hook_t unitest_setup;
+extern unitest_hook_t unitest_teardown;
 
-#define unitest_routine(name) unitest_routine_def(__test_ ## name)
+#define unitest_routine(name) __ut_routine(__test_ ## name)
+#define __ut_routine(name)						\
+	static int _ ## name(struct unitest *);				\
+	static __ut_ld_sec int (*name)(struct unitest *) = &_ ## name;	\
+	static int _ ## name(struct unitest *unitest)
 
-#define unitest_routine_def(name) \
-	unitest_routine_declare(name); \
-	unitest_routine_lvalue(name) = &name; \
-	unitest_routine_declare(name)
+#define unitest_begin(...)					\
+	unitest_routine_t __ut_ld_sec unitest_begin[1] = { 0 };	\
+	CALL(__ut_begin_, ##__VA_ARGS__)
 
-#define unitest_routine_lvalue(name) \
-	static unitest_ld_section int (*name ## _ptr)(struct unitest *)
+#define __ut_begin_0() unitest_hook_t unitest_setup = NULL
 
-#define unitest_routine_declare(name) \
-	static int name(struct unitest *unitest)
+#define __ut_begin_1(_)					\
+	static void __ut_setup(void);			\
+	unitest_hook_t unitest_setup = &__ut_setup;	\
+	static void __ut_setup(void)
 
-#define unitest_begin(...) \
-	unitest_routine_t unitest_ld_section __unitest_begin[1] = { 0 }; \
-	CALL(__unitest_begin_, ##__VA_ARGS__)
+#define unitest_end(...)					\
+	unitest_routine_t __ut_ld_sec unitest_end[1] = { 0 };	\
+	CALL(__ut_end_, ##__VA_ARGS__)
 
-#define __unitest_begin_0() unitest_routine_t __unitest_setup = NULL
+#define __ut_end_0() \
+	unitest_hook_t unitest_teardown = NULL
 
-#define __unitest_begin_1(name) \
-	unitest_routine_def(name, unitest_routine_t __unitest_setup)
+#define __ut_end_1(_) \
+	static void __ut_teardown(void);		\
+	unitest_hook_t unitest_teardown = &__ut_teardown;	\
+	static void __ut_teardown(void)
 
-#define unitest_end(...) \
-	unitest_routine_t unitest_ld_section __unitest_end[1] = { 0 }; \
-	CALL(__unitest_end_, ##__VA_ARGS__)
-
-#define __unitest_end_0() \
-	unitest_routine_t __unitest_teardown = NULL
-
-#define __unitest_end_1(name) \
-	unitest_routine_def(name, unitest_routine_t __unitest_teardown)
-
-#define unitest_ld_section __section(unitest_ld_section_name) \
-			   __unitest_no_asan __used
+#define __ut_ld_sec __section(__ut_ld_sec_name) __ut_no_asan __used
 
 #ifdef __APPLE__
-# define unitest_ld_section_name "__DATA,__miku_test"
+# define __ut_ld_sec_name "__DATA,__miku_test"
 #else
-# define unitest_ld_section_name ".miku_test"
+# define __ut_ld_sec_name ".miku_test"
 #endif
 
 #ifdef CC_HAS_VARIABLE_NO_SANITIZE
-# define __unitest_no_asan __no_asan
+# define __ut_no_asan __no_asan
 #else
-# define __unitest_no_asan
+# define __ut_no_asan
 #endif
 
 #endif /* UNITEST_H */
