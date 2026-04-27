@@ -14,6 +14,7 @@
       "kconfiglib",
       "openssl",
       "sqlite",
+      "tapview",
    ],
    "C_Cpp.default.includePath": [
       "${workspaceFolder}/include",

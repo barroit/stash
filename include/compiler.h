@@ -9,21 +9,22 @@
 #define likely(x)   __builtin_expect(!!(x), 1)
 #define unlikely(x) __builtin_expect(!!(x), 0)
 
-#define BUILD_BUG_ON(x) (sizeof(struct { int:(-!!(x)); }) & 0)
+#define BUG_ON(x) if (BUG_ON_EXPR(x))
+#define BUG_ON_EXPR(x) (sizeof(struct { int:(-!!(x)); }) & 0)
 
 #define type_is_same(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
 
 #define type_is_signed(x) ((typeof(x))-1 < 0)
 
-#define assert_same_type(a, b) BUILD_BUG_ON(!type_is_same(a, b))
+#define assert_same_type(a, b) BUG_ON_EXPR(!type_is_same(a, b))
 
-#define assert_diff_type(a, b) BUILD_BUG_ON(type_is_same(a, b))
+#define assert_diff_type(a, b) BUG_ON_EXPR(type_is_same(a, b))
 
-#define assert_array(x) BUILD_BUG_ON(type_is_same(x, &x[0]))
+#define assert_array(x) BUG_ON_EXPR(type_is_same(x, &x[0]))
 
-#define assert_pow2(x) BUILD_BUG_ON(!(x) || ((x) % 2) != 0)
+#define assert_pow2(x) BUG_ON_EXPR(!(x) || ((x) % 2) != 0)
 
-#define assert_ascii(x) BUILD_BUG_ON(((unsigned char)x) & 0x80)
+#define assert_ascii(x) BUG_ON_EXPR(((unsigned char)x) & 0x80)
 
 #ifdef CC_HAS_BUILTIN_ALIGN_UP
 # define align_up(m, n) __builtin_align_up(m, n)
@@ -41,8 +42,8 @@
 
 #define container_of(x, type, memb)				\
 ({								\
-	BUILD_BUG_ON(!type_is_same(*(x), void) &&		\
-		     !type_is_same(*(x), ((type *)0)->memb));	\
+	BUG_ON(!type_is_same(*(x), void) &&			\
+	       !type_is_same(*(x), ((type *)0)->memb));		\
 	(type *)((void *)(x) - __builtin_offsetof(type, memb));	\
 })
 
