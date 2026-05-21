@@ -35,14 +35,14 @@ sed $match"|extern const char *cmd_$prefix\1_help;|"
 printf '\n'
 
 cat <<EOF
-#define CMD_${class}_CMDS \\
+#define CMD_${class}_CMDS(v) \\
 EOF
 
 sed '$d' .tmp-$$ | \
-sed $match"|\tPA_OPT_CMD(\"\1\", cmd_$prefix\1, cmd_$prefix\1_help), \\\\|"
+sed $match"|\tPA_OPT_CMD(\"\1\", v, cmd_$prefix\1, cmd_$prefix\1_help), \\\\|"
 
 tail -n1 .tmp-$$ | \
-sed $match"|\tPA_OPT_CMD(\"\1\", cmd_$prefix\1, cmd_$prefix\1_help),|"
+sed $match"|\tPA_OPT_CMD(\"\1\", v, cmd_$prefix\1, cmd_$prefix\1_help),|"
 
 cat <<EOF
 

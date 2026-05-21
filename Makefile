@@ -15,7 +15,7 @@ include scripts/Makefile.probe
 include scripts/Makefile.kconfig
 
 ifeq ($(findstring p,$(firstword $(MAKEFLAGS))),)
-  ifneq ($(filter %.o %/entry miku,$(or $(MAKECMDGOALS),miku)),)
+  ifneq ($(filter %.o %/entry %/d.h miku,$(or $(MAKECMDGOALS),miku)),)
     # We're compiling/linking.
 
     include build/probe/cc/features
