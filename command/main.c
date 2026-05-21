@@ -10,9 +10,12 @@
 
 int cmd_main(int argc, const char **argv)
 {
-	// struct pa_opt opts[] = {
-	// 	{  }
-	// }
+	pa_command_fn cmd;
+	struct pa_opt opts[] = {
+		CMD_MAIN_CMDS(&cmd),
+		PA_OPT_END(),
+	};
+
 	atexit_setup();
 
 	// argc = pa_parse_args(argc, argv, , PA_STOP_BARE);

@@ -3,6 +3,8 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
+const char *cmd_help_help;
+
 int cmd_help(int argc, const char **argv)
 {
 	return 0;

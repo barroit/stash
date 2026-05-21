@@ -8,7 +8,9 @@ trap 'rm -f .tmp-$$' EXIT
 prefix=$(printf '%s' $1 | sed -e 's|^main/||' -e 's|/$|_|')
 name=$(basename $1)
 class=$(printf '%s' $name | tr [:lower:] [:upper:])
+
 match='s|.*/\([^/]*\).c'
+opt_replace="\tPA_OPT_CMD(\"\1\", v, cmd_$prefix\1, cmd_$prefix\1_help)"
 
 cat >.tmp-$$
 
@@ -22,15 +24,13 @@ cat <<EOF
 
 EOF
 
-cat .tmp-$$ | \
-sed $match"|int cmd_$prefix\1(int argc, const char **argv);|"
+sed $match"|int cmd_$prefix\1(int argc, const char **argv);|" .tmp-$$
 
 printf 'int cmd_%s(int argc, const char **argv);\n' $name
 
 printf '\n'
 
-cat .tmp-$$ | \
-sed $match"|extern const char *cmd_$prefix\1_help;|"
+sed $match"|extern const char *cmd_$prefix\1_help;|" .tmp-$$
 
 printf '\n'
 
@@ -38,11 +38,7 @@ cat <<EOF
 #define CMD_${class}_CMDS(v) \\
 EOF
 
-sed '$d' .tmp-$$ | \
-sed $match"|\tPA_OPT_CMD(\"\1\", v, cmd_$prefix\1, cmd_$prefix\1_help), \\\\|"
-
-tail -n1 .tmp-$$ | \
-sed $match"|\tPA_OPT_CMD(\"\1\", v, cmd_$prefix\1, cmd_$prefix\1_help),|"
+sed -e \$!$match"|$opt_replace, \\\\|" -e \$$match"|$opt_replace|" .tmp-$$
 
 cat <<EOF
 

@@ -14,10 +14,12 @@
 #define PA_ARG_NO_VAL  (1 << 0)
 #define PA_ARG_OPT_VAL (1 << 1)
 
+typedef int (*pa_command_fn)(int, const char **);
+
 enum pa_opt_class {
-	PA_ARG_NULL,
-	PA_ARG_OPT,
-	PA_ARG_CMD,
+	PA_OPTC_END,
+	PA_OPTC_OPT,
+	PA_OPTC_CMD,
 };
 
 enum pa_opt_type {
@@ -31,8 +33,14 @@ struct pa_opt {
 	char alias;
 
 	enum pa_opt_type type;
-	void *val;
-	intptr_t fb;
+	union {
+		void *val;
+		pa_command_fn *cmd_val;
+	};
+	union {
+		intptr_t ext;
+		pa_command_fn cmd_fn;
+	};
 
 	unsigned int flag;
 
@@ -40,11 +48,15 @@ struct pa_opt {
 	const char *help;
 };
 
-#define PA_OPT_END() \
-	{ .class = PA_ARG_NULL }
+#define PA_OPT_END() { .class = PA_OPTC_END }
 
-#define PA_OPT_CMD(n, v, h) \
-	{ .class = PA_ARG_CMD, .name = n, .val = v, .help = h }
+#define PA_OPT_CMD(n, v, f, h) {	\
+	.class   = PA_OPTC_CMD,		\
+	.name    = n,			\
+	.cmd_val = v,			\
+	.cmd_fn  = f,			\
+	.help    = h,			\
+}
 
 #define PA_OPT_FILE(n, a, v, h) \
 	PA_OPT_STR(n, a, v, "filename", h)

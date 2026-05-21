@@ -26,7 +26,6 @@
    ],
    "C_Cpp.default.forcedInclude": [
       "${workspaceFolder}/include/generated/build.h",
-      "${workspaceFolder}/include/generated/commands.h",
       "${workspaceFolder}/include/generated/config.h",
       "${workspaceFolder}/include/generated/features.h",
       "${workspaceFolder}/include/generated/unitest.h",
