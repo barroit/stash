@@ -116,8 +116,7 @@ clean:
 		find build/lib build/command \
 		     \( -name '*.o' -o -name '*.d' -o -name 'entry' \) \
 		     -exec rm {} + ; \
-		find include/command include/config include/generated \
-		     -type f -exec rm {} + ; \
+		find include/command -type f -exec rm {} + ; \
 		find command -name '*_entry.c' -exec rm {} + ; \
 	} 2>/dev/null
 	rm -f build/.commands build/cmdtree build/$(name)
