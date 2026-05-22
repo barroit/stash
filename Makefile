@@ -11,28 +11,32 @@ MAKEFLAGS += -rR
 
 build/$(name):
 
+stage3_tagets := %.o %/d.h %/entry miku build/$(name)
+current_tagets := $(or $(MAKECMDGOALS),miku)
+
+print_db := $(findstring p,$(firstword $(MAKEFLAGS)))
+no_print_db := $(if $(print_db),,1)
+on_stage3 := $(and $(no_print_db),$(filter $(stage3_tagets),$(current_tagets)))
+
 include scripts/Makefile.probe
 include scripts/Makefile.kconfig
 
-ifeq ($(findstring p,$(firstword $(MAKEFLAGS))),)
-  ifneq ($(filter %.o %/entry %/d.h miku build/$(name), \
-         $(or $(MAKECMDGOALS),miku)),)
-    # We're compiling/linking.
+ifneq ($(on_stage3),)
+  # We're compiling/linking.
 
-    include build/probe/cc/features
-    include build/probe/ld/features
-    include include/config/auto.conf
-    include build/cmdtree
+  include build/probe/cc/features
+  include build/probe/ld/features
+  include include/config/auto.conf
+  include build/cmdtree
 
-    CC != cat build/probe/cc/program
-    LD != cat build/probe/ld/id
+  CC != cat build/probe/cc/program
+  LD != cat build/probe/ld/id
 
-    UNIX != test $$(cat build/probe/host/id) != win32 && printf y
-    WIN32 != test $$(cat build/probe/host/id) = win32 && printf y
+  UNIX != test $$(cat build/probe/host/id) != win32 && printf y
+  WIN32 != test $$(cat build/probe/host/id) = win32 && printf y
 
-    USE_GCC != test $$(cat build/probe/cc/id) = gcc && printf y
-    USE_CLANG != test $$(cat build/probe/cc/id) = clang && printf y
-  endif
+  USE_GCC != test $$(cat build/probe/cc/id) = gcc && printf y
+  USE_CLANG != test $$(cat build/probe/cc/id) = clang && printf y
 endif
 
 include scripts/Makefile.flags
@@ -57,11 +61,9 @@ link-$(WIN32) := build/openssl/libcrypto.lib
 
 include scripts/Makefile.command
 
-ifeq ($(findstring p,$(firstword $(MAKEFLAGS))),)
-  ifneq ($(CONFIG_ENABLE_TEST),)
-    include scripts/Makefile.unitest
-    include scripts/Makefile.cmdtest
-  endif
+ifneq ($(or $(print_db),$(CONFIG_ENABLE_TEST)),)
+  include scripts/Makefile.unitest
+  include scripts/Makefile.cmdtest
 endif
 
 -include $(lib-obj-y:.o=.d1)
@@ -86,7 +88,9 @@ sqlite/build/% openssl/build/%:
 
 $(lib-obj-y):
 
-build/%.o: %.c include/generated/build.h include/generated/features.h
+build/%.o: %.c \
+	   include/generated/build.h include/generated/features.h \
+	   build/.flags.cc build/.flags.ld
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(addprefix -include ,$(filter include/generated/% \
 						       include/command/%,$^)) \

@@ -90,3 +90,9 @@ ifneq ($(CONFIG_WIN32),)
 	    -D_CRT_DECLARE_NONSTDC_NAMES \
 	    -D_CRT_SECURE_NO_WARNINGS
 endif
+
+build/.flags.%: .force
+	@trap 'rm -f .tmp-$$$$' EXIT && \
+	printf '%s\n' "$(CFLAGS)" >.tmp-$$$$ && \
+	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || \
+	{ mv .tmp-$$$$ $@ && touch $@; }
