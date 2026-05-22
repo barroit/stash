@@ -15,7 +15,7 @@
 #include "compiler.h"
 #include "err.h"
 
-#define sizeof_array(x) (__sizeof_array(x) + _array(x))
+#define sizeof_array(x) (__sizeof_array(x) + assert_array(x))
 #define __sizeof_array(x) (sizeof(x) / sizeof((x)[0]))
 
 /*

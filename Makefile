@@ -15,7 +15,8 @@ include scripts/Makefile.probe
 include scripts/Makefile.kconfig
 
 ifeq ($(findstring p,$(firstword $(MAKEFLAGS))),)
-  ifneq ($(filter %.o %/entry %/d.h miku,$(or $(MAKECMDGOALS),miku)),)
+  ifneq ($(filter %.o %/entry %/d.h miku build/$(name), \
+         $(or $(MAKECMDGOALS),miku)),)
     # We're compiling/linking.
 
     include build/probe/cc/features
@@ -44,6 +45,7 @@ lib-obj-y += build/sqlite/sqlite3.o \
 	     build/lib/parse_argv.o \
 	     build/lib/rio.o \
 	     build/lib/strbuf.o \
+	     build/lib/utf8.o \
 	     build/lib/xalloc.o
 
 ifeq ($(CC_HAS_REALLOCARRAY),)

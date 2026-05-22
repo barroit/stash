@@ -8,16 +8,16 @@
 
 #include "calc.h"
 
-#define foreach(idx, stop) \
+#define foreach_idx(idx, stop) \
 	for (idx = 0; idx < stop; idx++)
 
 /*
  * The maximum value of `start` is maxof(idx) - 1.
  */
-#define foreach_reverse(idx, start) \
+#define foreach_idx_reverse(idx, start) \
 	for (idx = start; idx != maxof(idx); idx--)
 
-#define foreach_from(idx, stop) \
+#define foreach_idx_from(idx, stop) \
 	for (; idx < stop; idx++)
 
 #endif /* FOREACH_H */

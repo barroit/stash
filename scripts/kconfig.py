@@ -37,6 +37,9 @@ def repo_name(kconf, name):
 def repo_version(kconf, name):
 	return first_line('build/probe/repo/version')
 
+def utf8_locale(kconf, name):
+	return first_line('build/probe/utf8/locale')
+
 def cc_has_feature(kconf, name, feature):
 	return 'y' if f"CC_HAS_{feature}" in cc_features else 'n'
 
@@ -52,6 +55,8 @@ functions = {
 
 	'repo-name': (repo_name, 0, 0),
 	'repo-version': (repo_version, 0, 0),
+
+	'utf8-locale': (utf8_locale, 0, 0),
 
 	'cc-has-feature': (cc_has_feature, 1, 1),
 	'ld-has-feature': (ld_has_feature, 1, 1),

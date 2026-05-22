@@ -14,7 +14,8 @@ bootstrap: build/probe/cc/program \
 	   build/probe/repo/version \
 	   build/probe/host/id \
 	   build/probe/host/arch \
-	   build/probe/host/name
+	   build/probe/host/name \
+	   build/probe/utf8/locale
 
 include/generated/build.h: build/probe/repo/name build/probe/repo/version \
 		     build/probe/host/id build/probe/host/arch \
@@ -95,3 +96,7 @@ build/probe/%/features: build/probe/%/program
 	sort >.tmp-$$$$ && \
 	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || \
 	{ mv .tmp-$$$$ $@ && touch $@; }
+
+build/probe/utf8/locale:
+	mkdir -p $(@D)
+	./scripts/probe-utf8-locale.sh >$@

@@ -99,7 +99,7 @@ int main(int argc, const char **argv)
 	/*
 	 * FIXME: support MT
 	 */
-	foreach(idx, stop) {
+	foreach_idx(idx, stop) {
 		struct unitest unitest = { 0 };
 		int err = tests[idx](&unitest);
 		const char *not = err ? "not " : "";
