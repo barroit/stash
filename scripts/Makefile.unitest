@@ -11,7 +11,8 @@ ut-unit-y := build/t/unit/log.o \
 	     build/t/unit/mbctype.o \
 	     build/t/unit/strbuf.o \
 	     build/t/unit/strbuf_alloc.o \
-	     build/t/unit/strbuf_prealloc.o
+	     build/t/unit/strbuf_prealloc.o \
+	     build/t/unit/strutil.o
 
 ut-y := $(ut-unit-y:.o=.run)
 
