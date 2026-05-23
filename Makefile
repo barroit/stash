@@ -50,6 +50,7 @@ lib-obj-y += build/sqlite/sqlite3.o \
 	     build/lib/parse_argv.o \
 	     build/lib/rio.o \
 	     build/lib/strbuf.o \
+	     build/lib/strutil.o \
 	     build/lib/utf8.o \
 	     build/lib/xalloc.o
 
