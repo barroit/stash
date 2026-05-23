@@ -11,7 +11,7 @@
 static size_t format_line(char *buf, size_t cap, const char *prefix,
 			  const char *hint, const char *fmt, va_list ap)
 {
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, cap - 1);
+	struct strbuf sb = SB_INIT_PREALLOC(buf, cap - 1);
 
 	if (prefix) {
 		sb_write_str(&sb, prefix);

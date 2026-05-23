@@ -13,7 +13,7 @@ unitest_begin();
 unitest_routine(sb_write_str_empty)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_write_str(&sb, "");
@@ -28,7 +28,7 @@ unitest_routine(sb_write_str_empty)
 unitest_routine(sb_write_str_at_head)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_write_str(&sb, "miku");
@@ -48,7 +48,7 @@ unitest_routine(sb_write_str_at_head)
 unitest_routine(sb_write_str_at_mid)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_write_str(&sb, "HatsuneMiku");
@@ -68,7 +68,7 @@ unitest_routine(sb_write_str_at_mid)
 unitest_routine(sb_write_str_at_tail)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_write_str(&sb, "mi");
@@ -89,7 +89,7 @@ unitest_routine(sb_write_str_at_overflow)
 {
 	char buf1[2];
 	char buf2[4];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf1, sizeof(buf1));
+	struct strbuf sb = SB_INIT_PREALLOC(buf1, sizeof(buf1));
 	size_t nr;
 
 	nr = sb_write_str(&sb, "39");
@@ -116,7 +116,7 @@ unitest_routine(sb_write_str_at_overflow)
 unitest_routine(sb_writef_empty)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_writef(&sb, "%s", "");
@@ -131,7 +131,7 @@ unitest_routine(sb_writef_empty)
 unitest_routine(sb_writef_at_head)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_writef_at(&sb, 0, "%s", "miku");
@@ -151,7 +151,7 @@ unitest_routine(sb_writef_at_head)
 unitest_routine(sb_writef_at_mid)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_writef_at(&sb, 0, "%s%s", "Hatsune", "Miku");
@@ -171,7 +171,7 @@ unitest_routine(sb_writef_at_mid)
 unitest_routine(sb_writef_tail)
 {
 	char buf[SZ_4K];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf, sizeof(buf));
+	struct strbuf sb = SB_INIT_PREALLOC(buf, sizeof(buf));
 	size_t nr;
 
 	nr = sb_writef_at(&sb, 0, "%s", "mi");
@@ -192,7 +192,7 @@ unitest_routine(sb_writef_at_overflow)
 {
 	char buf1[2];
 	char buf2[4];
-	struct strbuf sb = STRBUF_INIT_PREALLOC(buf1, sizeof(buf1));
+	struct strbuf sb = SB_INIT_PREALLOC(buf1, sizeof(buf1));
 	size_t nr;
 
 	nr = sb_writef_at(&sb, 0, "%d", 39);

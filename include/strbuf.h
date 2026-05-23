@@ -12,8 +12,8 @@
 
 #include "attr.h"
 
-#define STRBUF_ALLOC    (1 << 0)
-#define STRBUF_PREALLOC (1 << 1)
+#define SB_ALLOC    (1u << 0)
+#define SB_PREALLOC (1u << 1)
 
 struct strbuf {
 	char *buf;
@@ -22,13 +22,17 @@ struct strbuf {
 	uint32_t mode;
 };
 
-#define STRBUF_INIT { .buf = NULL, .len = 0, .cap = 0, .mode = STRBUF_ALLOC }
-#define STRBUF_INIT_PREALLOC(__buf, __cap) \
-	{ .buf = __buf, .len = 0, .cap = __cap, .mode = STRBUF_PREALLOC }
+#define SB_INIT { .buf = NULL, .len = 0, .cap = 0, .mode = SB_ALLOC }
+#define SB_INIT_PREALLOC(__buf, __cap) \
+	{ .buf = __buf, .len = 0, .cap = __cap, .mode = SB_PREALLOC }
 
 void sb_destroy(struct strbuf *sb);
 
 void sb_reinit(struct strbuf *sb, uint32_t mode);
+
+void sb_chop(struct strbuf *sb, size_t len);
+
+void sb_trunc(struct strbuf *sb, size_t len);
 
 #define sb_write_ch(sb, c) sb_write_ch_at(sb, (sb)->len, c)
 

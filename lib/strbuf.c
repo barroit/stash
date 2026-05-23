@@ -25,6 +25,18 @@ void sb_reinit(struct strbuf *sb, uint32_t mode)
 	sb->mode = mode;
 }
 
+void sb_chop(struct strbuf *sb, size_t len)
+{
+	sb->len -= len;
+	sb->buf[sb->len] = 0;
+}
+
+void sb_trunc(struct strbuf *sb, size_t len)
+{
+	sb->len = len;
+	sb->buf[len] = 0;
+}
+
 size_t sb_write_ch_at(struct strbuf *sb, size_t pos, char c)
 {
 	size_t new = pos + 1;
@@ -32,7 +44,7 @@ size_t sb_write_ch_at(struct strbuf *sb, size_t pos, char c)
 	assert(pos <= sb->len);
 
 	if (new + 1 > sb->cap) {
-		if (sb->mode & STRBUF_PREALLOC)
+		if (sb->mode & SB_PREALLOC)
 			return 0;
 		else
 			XREALLOCBUF(sb->buf, new + 1, sb->cap);
@@ -53,7 +65,7 @@ size_t sb_write_str_at(struct strbuf *sb, size_t pos, const char *s)
 	assert(pos <= sb->len);
 
 	if (new + 1 > sb->cap) {
-		if (sb->mode & STRBUF_PREALLOC)
+		if (sb->mode & SB_PREALLOC)
 			return 0;
 		else
 			XREALLOCBUF(sb->buf, new + 1, sb->cap);
@@ -80,7 +92,7 @@ size_t sb_vwritef_at(struct strbuf *sb, size_t pos, const char *fmt, va_list ap)
 	va_end(cp);
 
 	if (new + 1 > sb->cap) {
-		if (sb->mode & STRBUF_PREALLOC)
+		if (sb->mode & SB_PREALLOC)
 			return 0;
 		else
 			XREALLOCBUF(sb->buf, new + 1, sb->cap);
