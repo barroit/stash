@@ -46,6 +46,7 @@ lib-obj-y += build/sqlite/sqlite3.o \
 	     build/lib/err.o \
 	     build/lib/list.o \
 	     build/lib/log.o \
+	     build/lib/mbctype.o \
 	     build/lib/parse_argv.o \
 	     build/lib/rio.o \
 	     build/lib/strbuf.o \
