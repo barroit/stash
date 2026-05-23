@@ -11,7 +11,7 @@ MAKEFLAGS += -rR
 
 build/$(name):
 
-stage3_tagets := %.o %/d.h %/entry miku build/$(name)
+stage3_tagets := %.o %/d.h %/entry miku build/$(name) build/t/unit/%
 current_tagets := $(or $(MAKECMDGOALS),miku)
 
 print_db := $(findstring p,$(firstword $(MAKEFLAGS)))
