@@ -7,7 +7,8 @@ endif
 CFLAGS += -iquote t/unit/include
 
 ut-lib-y := build/t/unit/lib/main.o
-ut-unit-y := build/t/unit/log.o \
+ut-unit-y := build/t/unit/strbuf.o \
+	     build/t/unit/log.o \
 	     build/t/unit/strbuf_alloc.o \
 	     build/t/unit/strbuf_prealloc.o
 
