@@ -51,6 +51,7 @@ lib-obj-y += build/sqlite/sqlite3.o \
 	     build/lib/strbuf.o \
 	     build/lib/strutil.o \
 	     build/lib/unicode.o \
+	     build/lib/unicode_width.o \
 	     build/lib/xalloc.o
 
 ifeq ($(CC_HAS_REALLOCARRAY),)
@@ -101,9 +102,12 @@ command/%_entry.c: | command/%.c
 	./scripts/gen-command-entry.sh $(basename $(*F)) >$@
 
 build/%.d1: build/%.d
-	./scripts/fixconfig.sh $(shell grep .h: $< | tr -d : | \
-				       sed s,include/generated/config.h,,) \
-			       $*.c <$< >$@
+	@./scripts/fixconfig.sh $(shell grep .h: $< | tr -d : | \
+					sed s,include/generated/config.h,,) \
+				$*.c <$< >$@
+
+lib/unicode_width.c:
+	./scripts/gen-unicode_width_c.py >$@
 
 .force:
 

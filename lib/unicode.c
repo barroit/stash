@@ -11,12 +11,27 @@
 #include "unicode.h"
 
 unsigned int _uc_mbctype[] = {
-	[0x00 ... 0x7f] = _9A,
-	[0x80 ... 0xbf] = _9CB,
-	[0xc0 ... 0xdf] = _9B,
-	[0xe0 ... 0xef] = _9C,
-	[0xf0 ... 0xf7] = _9D,
+	[0x00 ... 0x7f] = _UC_9A,
+	[0x80 ... 0xbf] = _UC_9CB,
+	[0xc0 ... 0xdf] = _UC_9B,
+	[0xe0 ... 0xef] = _UC_9C,
+	[0xf0 ... 0xf7] = _UC_9D,
 	[0xf8 ... 0xff] = -1,
+};
+
+static const wchar_t punct[] = {
+	0x0021, /* EXCLAMATION MARK */
+	0x002c, /* COMMA */
+	0x002e, /* FULL STOP */
+	0x003f, /* QUESTION MARK */
+	0x2025, /* TWO DOT LEADER */
+	0x2026, /* HORIZONTAL ELLIPSIS */
+	0x3001, /* IDEOGRAPHIC COMMA */
+	0x3002, /* IDEOGRAPHIC FULL STOP */
+	0xff01, /* FULLWIDTH EXCLAMATION MARK */
+	0xff0c, /* FULLWIDTH COMMA */
+	0xff0e, /* FULLWIDTH FULL STOP */
+	0xff1f, /* FULLWIDTH QUESTION MARK */
 };
 
 static int try_c_locales(void)
@@ -78,15 +93,15 @@ wchar_t uc_mbtowc(const char *seq)
 	unsigned int len = uc_mbctype(*seq);
 
 	switch (len) {
-	case _9D:
+	case _UC_9D:
 		res |= seq[3] & 0x3f;
 		shift += 6;
 		mask >>= 1;
-	case _9C:
+	case _UC_9C:
 		res |= (seq[2] & 0x3f) << (shift - 6);
 		shift += 6;
 		mask >>= 1;
-	case _9B:
+	case _UC_9B:
 		res |= ((seq[0] & mask) << shift) |
 		       ((seq[1] & 0x3f) << (shift - 6));
 		break;
@@ -95,4 +110,23 @@ wchar_t uc_mbtowc(const char *seq)
 	}
 
 	return res;
+}
+
+int uc_iseoc(wchar_t c)
+{
+	size_t l = 0;
+	size_t r = sizeof_array(punct);
+
+	while (l < r) {
+		size_t m = (l + r) >> 1;
+
+		if (c < punct[m])
+			r = m;
+		else if (c > punct[m])
+			l = m + 1;
+		else
+			return 1;
+	}
+
+	return 0;
 }
