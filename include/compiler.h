@@ -49,4 +49,8 @@
 
 #define unreachable __builtin_unreachable
 
+#define popcount __builtin_popcount
+
+#define alignof __alignof__
+
 #endif /* COMPILER_H */

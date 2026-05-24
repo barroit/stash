@@ -26,6 +26,8 @@ struct strbuf {
 #define SB_INIT_PREALLOC(__buf, __cap) \
 	{ .buf = __buf, .len = 0, .cap = __cap, .mode = SB_PREALLOC }
 
+void sb_init(struct strbuf *sb, uint32_t mode);
+
 void sb_destroy(struct strbuf *sb);
 
 void sb_reinit(struct strbuf *sb, uint32_t mode);

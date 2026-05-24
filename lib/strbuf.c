@@ -13,13 +13,23 @@
 #include "strbuf.h"
 #include "xalloc.h"
 
+void sb_init(struct strbuf *sb, uint32_t mode)
+{
+	memset(sb, 0, sizeof(*sb));
+
+	sb->mode = mode;
+}
+
 void sb_destroy(struct strbuf *sb)
 {
 	free(sb->buf);
+
+	sb->buf = NULL;
 }
 
 void sb_reinit(struct strbuf *sb, uint32_t mode)
 {
+	sb_destroy(sb);
 	memset(sb, 0, sizeof(*sb));
 
 	sb->mode = mode;

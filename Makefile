@@ -49,6 +49,7 @@ lib-obj-y += build/sqlite/sqlite3.o \
 	     build/lib/parse_argv.o \
 	     build/lib/rio.o \
 	     build/lib/strbuf.o \
+	     build/lib/strlist.o \
 	     build/lib/strutil.o \
 	     build/lib/unicode.o \
 	     build/lib/unicode_width.o \
