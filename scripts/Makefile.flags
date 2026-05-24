@@ -96,5 +96,4 @@ endif
 build/.flags.%: .force
 	@trap 'rm -f .tmp-$$$$' EXIT && \
 	printf '%s\n' "$(CFLAGS)" >.tmp-$$$$ && \
-	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || \
-	{ mv .tmp-$$$$ $@ && touch $@; }
+	$(call mv_stale,.tmp-$$$$,$(@),)

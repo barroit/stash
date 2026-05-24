@@ -93,9 +93,7 @@ build/probe/tools:
 build/probe/%/features: build/probe/%/program
 	trap 'rm -f .tmp-$$$$' EXIT && \
 	./scripts/probe-$*-features.sh $$(cat $^) | \
-	sort >.tmp-$$$$ && \
-	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || \
-	{ mv .tmp-$$$$ $@ && touch $@; }
+	sort >.tmp-$$$$ && $(call mv_stale,.tmp-$$$$,$(@),$?)
 
 build/probe/utf8/locale:
 	mkdir -p $(@D)

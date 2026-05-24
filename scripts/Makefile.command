@@ -16,5 +16,4 @@ build/.commands: .force
 	@mkdir -p $(@D)
 	@trap 'rm -f .tmp-$$$$' EXIT && \
 	find command -type f | sort >.tmp-$$$$ && \
-	test -f $@ && diff .tmp-$$$$ $@ >/dev/null || \
-	{ mv .tmp-$$$$ $@ && touch $@; }
+	$(call mv_stale,.tmp-$$$$,$(@),)

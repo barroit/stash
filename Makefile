@@ -18,6 +18,11 @@ print_db := $(findstring p,$(firstword $(MAKEFLAGS)))
 no_print_db := $(if $(print_db),,1)
 on_stage3 := $(and $(no_print_db),$(filter $(stage3_tagets),$(current_tagets)))
 
+define mv_stale
+	test -f $(2) && cmp -s $(1) $(2) && test -z "$(3)" || \
+	{ mv $(1) $(2) && touch $(2); }
+endef
+
 include scripts/Makefile.probe
 include scripts/Makefile.kconfig
 
