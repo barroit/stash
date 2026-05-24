@@ -7,7 +7,7 @@
 
 #include "strutil.h"
 
-char *strskip(const char *s1, const char *s2)
+const char *strskip(const char *s1, const char *s2)
 {
 	do {
 		if (!s2[0])

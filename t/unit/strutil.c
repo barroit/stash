@@ -12,7 +12,7 @@ unitest_begin();
 unitest_routine(strskip_prefix)
 {
 	const char s[] = "Hatsune Miku";
-	char *res = strskip(s, "Hatsune ");
+	const char *res = strskip(s, "Hatsune ");
 
 	uniassert_equal(res, s + 8);
 	uniassert_strequal(res, "Miku");
@@ -22,7 +22,7 @@ unitest_routine(strskip_prefix)
 unitest_routine(strskip_empty)
 {
 	const char s[] = "miku";
-	char *res = strskip(s, "");
+	const char *res = strskip(s, "");
 
 	uniassert_equal(res, s);
 	uniassert_strequal(res, "miku");
