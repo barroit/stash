@@ -12,6 +12,7 @@ ut-unit-y := build/t/unit/log.o \
 	     build/t/unit/strbuf_alloc.o \
 	     build/t/unit/strbuf_prealloc.o \
 	     build/t/unit/strlist.o \
+	     build/t/unit/strtox.o \
 	     build/t/unit/strutil.o \
 	     build/t/unit/unicode.o
 
