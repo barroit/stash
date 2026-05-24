@@ -11,7 +11,7 @@
 #include "calc.h"
 #include "cpp.h"
 #include "log.h"
-#include "reallocarray.h"
+#include "patch/reallocarray.h"
 #include "xalloc.h"
 
 static inline void assert_allocated(const char *file, int line,

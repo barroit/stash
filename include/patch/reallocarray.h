@@ -8,6 +8,8 @@
 
 #include <stddef.h>
 
+#ifndef CC_HAS_REALLOCARRAY
 void *reallocarray(void *ptr, size_t nmemb, size_t size);
+#endif
 
 #endif /* REALLOCARRAY_H */

@@ -45,10 +45,11 @@ struct strlist {
 #define __sl_mode_mask (SL_USE_CP | SL_USE_REF | SL_USE_SB)
 #define __sl_mode(f)   ((f) & __sl_mode_mask)
 
-#define SL_INIT(sl) {				\
-	.head  = LIST_HEAD_INIT(sl.head),	\
-	.idle  = LIST_HEAD_INIT(sl.idle),	\
-	.flags = SL_USE_CP | SL_RET_LEN,	\
+#define SL_INIT_CP(s) SL_INIT(s, SL_USE_CP | SL_RET_LEN)
+#define SL_INIT(s, f) {				\
+	.head  = LIST_HEAD_INIT(s.head),	\
+	.idle  = LIST_HEAD_INIT(s.idle),	\
+	.flags = f,				\
 }
 
 void sl_init(struct strlist *sl, uint64_t flags);

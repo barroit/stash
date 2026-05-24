@@ -3,9 +3,12 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
+#include <stdio.h>
+
 const char *cmd_add_help;
 
 int cmd_add(int argc, const char **argv)
 {
+	puts("test");
 	return 0;
 }

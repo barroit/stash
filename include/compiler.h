@@ -53,4 +53,6 @@
 
 #define alignof __alignof__
 
+#define trap __builtin_trap
+
 #endif /* COMPILER_H */

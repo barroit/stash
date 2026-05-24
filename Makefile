@@ -62,7 +62,11 @@ lib-obj-y += build/sqlite/sqlite3.o \
 	     build/lib/xalloc.o
 
 ifeq ($(CC_HAS_REALLOCARRAY),)
-  lib-obj-y += build/lib/reallocarray.o
+  lib-obj-y += build/lib/patch/reallocarray.o
+endif
+
+ifeq ($(CC_HAS_STRCHRNUL),)
+  lib-obj-y += build/lib/patch/strchrnul.o
 endif
 
 link-$(UNIX) := build/openssl/libcrypto.a

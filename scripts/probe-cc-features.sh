@@ -63,6 +63,20 @@ static void a(void)
 EOF
 
 probe_feature <<'EOF' &
+CC_HAS_STRCHRNUL
+-D_GNU_SOURCE
+
+#include <string.h>
+
+static void a(void)
+{
+	char *p = strchrnul("miku", 'x');
+
+	if (p);
+}
+EOF
+
+probe_feature <<'EOF' &
 CC_HAS_SSIZE_T
 -D_GNU_SOURCE
 

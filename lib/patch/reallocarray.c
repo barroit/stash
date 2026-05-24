@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #include "calc.h"
-#include "reallocarray.h"
+#include "patch/reallocarray.h"
 
 void *reallocarray(void *ptr, size_t nmemb, size_t size)
 {

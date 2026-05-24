@@ -30,4 +30,7 @@
       "${workspaceFolder}/include/generated/features.h",
       "${workspaceFolder}/include/generated/unitest.h",
    ],
+   "C_Cpp.default.defines": [
+      "_GNU_SOURCE",
+   ],
 }
