@@ -25,7 +25,7 @@ print(f'''\
 
 #include "calc.h"
 
-static const wchar_t width[][2] = {{\
+static const wchar_t table[][2] = {{\
 ''')
 
 for line in stream:
@@ -57,15 +57,18 @@ print('''\
 
 int uc_iswide(wchar_t c)
 {
+	if (c < table[0][0])
+		return 0;
+
 	size_t l = 0;
-	size_t r = sizeof_array(width);
+	size_t r = sizeof_array(table);
 
 	while (l < r) {
 		size_t m = (l + r) >> 1;
 
-		if (c < width[m][0])
+		if (c < table[m][0])
 			r = m;
-		else if (c > width[m][1])
+		else if (c > table[m][1])
 			l = m + 1;
 		else
 			return 1;
