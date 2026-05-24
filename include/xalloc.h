@@ -10,14 +10,11 @@
 #include "calc.h"
 #include "compiler.h"
 
-#define xmalloc(size) __xmalloc(__FILE__, __LINE__, __func__, size)
-#define xreallocarray(ptr, nmemb, size) \
-	__xreallocarray(__FILE__, __LINE__, __func__, ptr, nmemb, size)
-
-void *__xmalloc(const char *file, int line, const char *func, size_t size);
-
-void *__xreallocarray(const char *file, int line, const char *func,
-		      void *ptr, size_t nmemb, size_t size);
+#define xcalloc(...)       __xalloc(calloc, __VA_ARGS__)
+#define xmalloc(...)       __xalloc(malloc, __VA_ARGS__)
+#define xrealloc(...)      __xalloc(realloc, __VA_ARGS__)
+#define xreallocarray(...) __xalloc(reallocarray, __VA_ARGS__)
+#define xstrdup(...)       __xalloc(strdup, __VA_ARGS__)
 
 #define XREALLOCBUF(x, new, cap)			\
 do {							\
@@ -28,5 +25,21 @@ do {							\
 		cap = next_buf_size(new);		\
 	x = xreallocarray(x, sizeof(*(x)), cap);	\
 } while (0)
+
+#define __xalloc(name, ...) \
+	__x ## name(__FILE__, __LINE__, __func__, __VA_ARGS__)
+
+void *__xcalloc(const char *file, int line, const char *func, size_t nmemb,
+		size_t size);
+
+void *__xmalloc(const char *file, int line, const char *func, size_t size);
+
+void *__xrealloc(const char *file, int line, const char *func, void *ptr,
+		 size_t size);
+
+void *__xreallocarray(const char *file, int line, const char *func, void *ptr,
+		      size_t nmemb, size_t size);
+
+char *__xstrdup(const char *file, int line, const char *func, const char *s);
 
 #endif /* XALLOC_H */
