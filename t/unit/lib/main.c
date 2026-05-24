@@ -23,7 +23,7 @@ static int require_deps(const char *program, const char *dump)
 	unsigned int missing = 0;
 	char *test;
 
-	while ((test = fgets(buf, cap, stream))) {
+	while (test = fgets(buf, cap, stream)) {
 		char *lf = strchr(buf, '\n');
 		char *sep = strrchr(buf, '/');
 		struct stat st;
