@@ -99,6 +99,94 @@ unitest_routine(uc_ismb_invalid)
 	return 0;
 }
 
+unitest_routine(uc_iseoc_punct)
+{
+	const wchar_t punct[] = {
+		0x0021,
+		0x002c,
+		0x002e,
+		0x003f,
+		0x2025,
+		0x2026,
+		0x3001,
+		0x3002,
+		0xff01,
+		0xff0c,
+		0xff0e,
+		0xff1f,
+	};
+	size_t idx;
+
+	for (idx = 0; idx < sizeof(punct) / sizeof(punct[0]); idx++)
+		uniassert_is(uc_iseoc(punct[idx]));
+
+	return 0;
+}
+
+unitest_routine(uc_iseoc_non_punct)
+{
+	const wchar_t chars[] = {
+		0x0020,
+		0x003a,
+		0x2024,
+		0x2027,
+		0x3000,
+		0x3003,
+		0xff02,
+		0xff1e,
+		0xff20,
+	};
+	size_t idx;
+
+	for (idx = 0; idx < sizeof(chars) / sizeof(chars[0]); idx++)
+		uniassert_not(uc_iseoc(chars[idx]));
+
+	return 0;
+}
+
+unitest_routine(uc_iswide)
+{
+	const wchar_t chars[] = {
+		0x1100,
+		0x115f,
+		0x231a,
+		0x3041,
+		0x3096,
+		0xac00,
+		0xd7a3,
+		0xff01,
+		0xff60,
+	};
+	size_t idx;
+
+	for (idx = 0; idx < sizeof(chars) / sizeof(chars[0]); idx++)
+		uniassert_is(uc_iswide(chars[idx]));
+
+	return 0;
+}
+
+unitest_routine(uc_iswide_narrow)
+{
+	const wchar_t chars[] = {
+		0x0021,
+		0x10ff,
+		0x1160,
+		0x231c,
+		0x2e9a,
+		0x3040,
+		0x3097,
+		0xa48d,
+		0xd7a4,
+		0xff61,
+	};
+	size_t idx;
+
+	for (idx = 0; idx < sizeof(chars) / sizeof(chars[0]); idx++)
+		uniassert_not(uc_iswide(chars[idx]));
+
+	return 0;
+}
+
 unitest_routine(uc_mbslen_empty)
 {
 	uniassert_equal(uc_mbslen(""), 0);
