@@ -19,18 +19,18 @@ struct strbuf {
 	char *buf;
 	size_t len;
 	size_t cap;
-	uint32_t mode;
+	uint64_t mode;
 };
 
 #define SB_INIT { .buf = NULL, .len = 0, .cap = 0, .mode = SB_ALLOC }
 #define SB_INIT_PREALLOC(__buf, __cap) \
 	{ .buf = __buf, .len = 0, .cap = __cap, .mode = SB_PREALLOC }
 
-void sb_init(struct strbuf *sb, uint32_t mode);
+void sb_init(struct strbuf *sb, uint64_t mode);
 
 void sb_destroy(struct strbuf *sb);
 
-void sb_reinit(struct strbuf *sb, uint32_t mode);
+void sb_reinit(struct strbuf *sb, uint64_t mode);
 
 void sb_chop(struct strbuf *sb, size_t len);
 

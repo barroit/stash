@@ -13,7 +13,7 @@
 #include "strbuf.h"
 #include "xalloc.h"
 
-void sb_init(struct strbuf *sb, uint32_t mode)
+void sb_init(struct strbuf *sb, uint64_t mode)
 {
 	memset(sb, 0, sizeof(*sb));
 
@@ -27,7 +27,7 @@ void sb_destroy(struct strbuf *sb)
 	sb->buf = NULL;
 }
 
-void sb_reinit(struct strbuf *sb, uint32_t mode)
+void sb_reinit(struct strbuf *sb, uint64_t mode)
 {
 	sb_destroy(sb);
 	memset(sb, 0, sizeof(*sb));
