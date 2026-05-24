@@ -8,11 +8,11 @@ CFLAGS += -iquote t/unit/include
 
 ut-lib-y := build/t/unit/lib/main.o
 ut-unit-y := build/t/unit/log.o \
-	     build/t/unit/mbctype.o \
 	     build/t/unit/strbuf.o \
 	     build/t/unit/strbuf_alloc.o \
 	     build/t/unit/strbuf_prealloc.o \
-	     build/t/unit/strutil.o
+	     build/t/unit/strutil.o \
+	     build/t/unit/unicode.o
 
 ut-y := $(ut-unit-y:.o=.run)
 

@@ -6,7 +6,7 @@
 #include "atexit.h"
 #include "err.h"
 #include "parse_argv.h"
-#include "utf8.h"
+#include "unicode.h"
 
 int cmd_main(int argc, const char **argv)
 {
@@ -17,7 +17,7 @@ int cmd_main(int argc, const char **argv)
 	};
 
 	atexit_setup();
-	utf8_setup();
+	uc_force_utf8_ctype();
 
 	// argc = pa_parse_args(argc, argv, , PA_STOP_BARE);
 	return 0;
