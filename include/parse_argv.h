@@ -82,7 +82,7 @@ struct pa_opt {
 #define PA_OPT_COUNT_F(n, a, v, f, h) \
 	__PA_OPT(n, a, PA_OPTT_COUNT, v, 0, PA_OPT_NO_ARG | (f), NULL, h)
 
-#define PA_OPT_FILE(n, a, v, h) PA_OPT_STRING_FP(n, a, v, 0, "path", h)
+#define PA_OPT_FILE(n, a, v, h) PA_OPT_STRING_P(n, a, v, "path", h)
 #define PA_OPT_STRING(n, a, v, h) PA_OPT_STRING_F(n, a, v, 0, h)
 #define PA_OPT_STRING_F(n, a, v, f, h) PA_OPT_STRING_FP(n, a, v, f, NULL, h)
 #define PA_OPT_STRING_P(n, a, v, p, h) PA_OPT_STRING_FP(n, a, v, 0, p, h)
@@ -91,7 +91,6 @@ struct pa_opt {
 
 #define PA_OPT_NUMBER(n, a, v, h) PA_OPT_NUMBER_F(n, a, v, 0, h)
 #define PA_OPT_NUMBER_F(n, a, v, f, h) PA_OPT_NUMBER_EF(n, a, v, NULL, f, h)
-#define PA_OPT_NUMBER_E(n, a, v, e, h) PA_OPT_NUMBER_EF(n, a, v, e, 0, h)
 #define PA_OPT_NUMBER_EF(n, a, v, e, f, h) \
 	__PA_OPT(n, a, PA_OPTT_NUMBER, v, e, f, NULL, h)
 
