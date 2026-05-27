@@ -7,7 +7,8 @@ trap 'rm -f .tmp-$$' EXIT
 
 prefix=$(printf '%s' $1 | sed -e 's|^main/||' -e 's|/$|_|')
 name=$(basename $1)
-class=$(printf '%s' $name | tr [:lower:] [:upper:])
+class=$(printf '%s' $name | tr '[:lower:]' '[:upper:]')
+pretty=$(printf '%s' $1 | sed "s|^main|$(head -n1 README)|" | tr / ' ')
 
 match='s|.*/\([^/]*\).c'
 opt_replace="\tPA_OPT_CMD(\"\1\", v, cmd_$prefix\1, cmd_$prefix\1_help)"
@@ -36,6 +37,7 @@ printf '\n'
 
 cat <<EOF
 #define CMD_${class}_CMDS(v) \\
+	PA_OPT_GROUP("${pretty}commands:"), \\
 EOF
 
 sed -e \$!$match"|$opt_replace, \\\\|" -e \$$match"|$opt_replace|" .tmp-$$
