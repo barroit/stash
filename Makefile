@@ -69,6 +69,9 @@ ifeq ($(CC_HAS_STRCHRNUL),)
   lib-obj-y += build/lib/patch/strchrnul.o
 endif
 
+lib-obj-$(UNIX) += build/unix/term.o
+lib-obj-$(WIN32) += build/win32/term.o
+
 link-$(UNIX) := build/openssl/libcrypto.a
 link-$(WIN32) := build/openssl/libcrypto.lib
 
