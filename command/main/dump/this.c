@@ -3,7 +3,7 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
-const char *cmd_dump_this_help;
+const char *cmd_dump_this_help = "dump this";
 
 int cmd_dump_this(int argc, const char **argv)
 {

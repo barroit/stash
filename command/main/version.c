@@ -3,7 +3,7 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
-const char *cmd_version_help;
+const char *cmd_version_help = "version";
 
 int cmd_version(int argc, const char **argv)
 {

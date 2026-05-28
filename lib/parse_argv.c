@@ -32,6 +32,7 @@
 #define CLI_LINE_LENGTH   80
 #define CLI_OPTION_INDENT 2
 #define CLI_OPTION_ALIGN  20
+#define CLI_COMMAND_ALIGN 10
 
 enum pa_res {
 	PARSE_CONTINUE,
@@ -663,8 +664,10 @@ static void show_opt_usage(struct strlist *sl, FILE *stream,
 
 			fputs(opt->name, stream);
 			putc('\n', stream);
-		case PA_OPTC_COMMAND:
 			continue;
+		case PA_OPTC_COMMAND:
+			fmt = "%s";
+			pad = CLI_COMMAND_ALIGN + 2;
 		}
 
 		fprintf(stream, "%*s", (int)len, "");

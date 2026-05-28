@@ -3,7 +3,7 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
-const char *cmd_list_all_help;
+const char *cmd_list_all_help = "list all";
 
 int cmd_list_all(int argc, const char **argv)
 {

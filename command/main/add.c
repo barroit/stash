@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-const char *cmd_add_help;
+const char *cmd_add_help = "add";
 
 int cmd_add(int argc, const char **argv)
 {

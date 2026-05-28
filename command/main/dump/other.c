@@ -3,7 +3,7 @@
  * Copyright 2026 Jiamu Sun <39@barroit.sh>
  */
 
-const char *cmd_dump_other_help;
+const char *cmd_dump_other_help = "dump other";
 
 int cmd_dump_other(int argc, const char **argv)
 {

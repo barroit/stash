@@ -29,10 +29,6 @@ int cmd_main(int argc, const char **argv)
 	uc_force_utf8_ctype();
 
 	argc = pa_parse_args(argc, argv, opts, usage, PA_LAX_CMD);
-
-	while (*argv)
-		puts(*argv++);
-	puts(test);
-
+	cmd(argc, argv);
 	return 0;
 }

@@ -66,6 +66,8 @@ struct pa_opt {
 
 #define PA_OPT_END() { .class = PA_OPTC_END }
 
+#define PA_OPT_GROUP(n) { .class = PA_OPTC_GROUP, .name = n }
+
 #define PA_OPT_CMD(n, v, f, h) {	\
 	.class   = PA_OPTC_COMMAND,	\
 	.name    = n,			\
