@@ -19,6 +19,7 @@
 #include "strlist.h"
 #include "strtox.h"
 #include "strutil.h"
+#include "term.h"
 #include "xalloc.h"
 
 #define __PA_HAS_CMD  (1llu << 63)
@@ -29,10 +30,10 @@
 #define OPT_UNSET (1u << 2)
 #define OPT_NO_NO (1u << 4)
 
-#define CLI_LINE_LENGTH   80
 #define CLI_OPTION_INDENT 2
 #define CLI_OPTION_ALIGN  20
 #define CLI_COMMAND_ALIGN 10
+#define CLI_MIN_COLS      30
 
 enum pa_res {
 	PARSE_CONTINUE,
@@ -596,7 +597,8 @@ out:
 	return ret;
 }
 
-static void show_cmd_usage(struct strlist *sl, FILE *stream, const char **usage)
+static void show_cmd_usage(struct strlist *sl, FILE *stream, const char **usage,
+			   size_t cols)
 {
 	const char *prefix = "usage: ";
 	size_t prefix_len = strlen("usage: ");
@@ -614,9 +616,9 @@ static void show_cmd_usage(struct strlist *sl, FILE *stream, const char **usage)
 
 		cmd_len = rest - line;
 		pad = prefix_len + cmd_len;
-		wrap = CLI_LINE_LENGTH - prefix_len;
+		wrap = cols - prefix_len;
 
-		if ((CLI_LINE_LENGTH >> 1) > pad)
+		if ((cols >> 1) > pad)
 			wrap -= cmd_len;
 
 		fprintf(stream, "%*s%.*s", (int)prefix_len, prefix,
@@ -645,7 +647,7 @@ next:
 }
 
 static void show_opt_usage(struct strlist *sl, FILE *stream,
-			   struct pa_opt *opts)
+			   struct pa_opt *opts, size_t cols)
 {
 	unsigned int cnt = 0;
 	struct pa_opt *opt;
@@ -693,7 +695,7 @@ static void show_opt_usage(struct strlist *sl, FILE *stream,
 			len = 0;
 		}
 
-		sl_read_line(sl, opt->help, CLI_LINE_LENGTH - pad);
+		sl_read_line(sl, opt->help, cols - pad);
 
 		str = sl_pop(sl);
 		fprintf(stream, "%*s%s\n", (int)(pad - len), "", str);
@@ -711,10 +713,13 @@ static void show_opt_usage(struct strlist *sl, FILE *stream,
 static void param_show_help(struct pa_ctx *ctx, FILE *stream)
 {
 	struct strlist sl;
+	size_t cols = term_cols();
 
 	sl_init(&sl, SL_USE_SB);
-	show_cmd_usage(&sl, stream, ctx->usage);
-	show_opt_usage(&sl, stream, ctx->opts);
+	cols = clamp(cols, CLI_MIN_COLS, TERM_NICE_COLS);
+
+	show_cmd_usage(&sl, stream, ctx->usage, cols);
+	show_opt_usage(&sl, stream, ctx->opts, cols);
 
 	exit(stream == stderr ? 1 : 0);
 }

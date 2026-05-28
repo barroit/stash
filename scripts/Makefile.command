@@ -5,7 +5,7 @@ build/command/%/entry: $(lib-obj-y) $(link-y)
 	$(CC) $(LDFLAGS) -fuse-ld=$(LD) $(filter %.o %.a %.lib,$^) \
 	      -o $@
 
-include/command/%/d.h:
+include/command/%/d.h: build/cmdtree
 	mkdir -p $(@D)
 	printf '%s\n' $| | sort | ./scripts/gen-d_h.sh $*/ >$@
 
