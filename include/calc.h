@@ -59,5 +59,6 @@
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) > (b) ? (a) : (b))
+#define clamp(x, lo, hi) min(max((x), (lo)), (hi))
 
 #endif /* CALC_H */
