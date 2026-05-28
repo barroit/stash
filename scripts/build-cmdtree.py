@@ -63,27 +63,45 @@ def print_object_deps(deps):
 
 	print(f": include/{header}/d.h\n")
 
-def print_rules(deps):
-	first = 1
-	sub = []
+def object_path(item):
+	if item.endswith('.c'):
+		item = item[0:-2]
+
+	return f"build/{item}.o"
+
+def collect_objects(deps):
+	objects = []
 
 	for item in deps:
 		if isinstance(item, list):
-			print_rules(item)
-			sub.append(item[0])
+			objects += collect_objects(item)
 			continue
 
-		if first:
-			print_no_lf(f"build/{item}/entry:")
-			print_no_lf(f" build/{item}.o")
-			print_no_lf(f" build/{item}_entry.o")
-		else:
-			print_no_lf(f" build/{item[0:-2]}.o")
+		objects.append(object_path(item))
 
-		first = 0
+	return objects
 
-	for item in sub:
-		print_no_lf(f" build/{item}/entry")
+def print_binary_deps(deps):
+	root = None
+	seen = set()
+
+	for item in deps:
+		if isinstance(item, list):
+			print_binary_deps(item)
+			continue
+
+		if root is None:
+			root = item
+
+	print_no_lf(f"build/{root}/entry:")
+	print_no_lf(f" build/{root}_entry.o")
+
+	for obj in collect_objects(deps):
+		if obj in seen:
+			continue
+
+		print_no_lf(f" {obj}")
+		seen.add(obj)
 
 	print('\n')
 
@@ -118,6 +136,6 @@ print_headers(deps)
 
 print_object_deps(deps)
 
-print_rules(deps)
+print_binary_deps(deps)
 
 print_command_object_y(deps)

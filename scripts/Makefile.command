@@ -9,7 +9,7 @@ include/command/%/d.h:
 	mkdir -p $(@D)
 	printf '%s\n' $| | sort | ./scripts/gen-d_h.sh $*/ >$@
 
-build/cmdtree: build/.commands
+build/cmdtree: build/.commands scripts/build-cmdtree.py
 	./scripts/build-cmdtree.py command/main.c >$@
 
 build/.commands: .force
